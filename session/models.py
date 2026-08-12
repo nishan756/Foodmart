@@ -84,4 +84,5 @@ class CustomUser(AbstractBaseUser , PermissionsMixin):
 
     class Meta:
         ordering = ["user_type" , "-created_at"]
+        verbose_name = "User"
 
