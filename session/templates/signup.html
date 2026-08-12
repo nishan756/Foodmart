@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+SignUp
+{% endblock title %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+        <div class="card login-card">
+          <div class="card-body">
+            <h2 class="text-center login-title mb-4">Welcome</h2>
+            <p class="text-center text-muted mb-4">Please create an account to continue</p>
+
+            <form id="signUpForm" action="{% url 'signup' %}" method="POST">
+              {% csrf_token %}
+
+              {% for field in form %}
+                <div class="mb-3">
+                    {{field.label_tag}}
+                    {{field}}
+                    {% if field.errors %}
+                        {% for error in field.errors %}
+                            <p class='text-bg-danger'>{{error}}</p>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                {% endfor %}
+
+              <button type="submit" class="btn btn-primary btn-login w-100 text-white mb-3">Sign Up</button>
+
+              <p class="text-center text-muted mb-0">
+                Already have an account? <a href="#" class="text-decoration-none" style="color: #764ba2;">Login</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock content %}

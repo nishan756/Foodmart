@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+User Login
+{% endblock title %}
+
+{% block css %}
+<link rel='stylesheet' href="{% static 'css/login.css'%}">
+{% endblock css %}
+
+
+{% block content %}
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-12 col-sm-10 col-md-8 col-lg-5">
+        <div class="card login-card">
+          <div class="card-body">
+            <h2 class="text-center login-title mb-4">Welcome Back</h2>
+            <p class="text-center text-muted mb-4">Please sign in to your account</p>
+
+            <form id="loginForm" action="{% url 'login' %}" method="POST">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="username" class="form-label">Email address</label>
+                {{form.username}}
+              </div>
+
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                {{form.password}}
+              </div>
+
+              <div class="d-flex justify-content-between align-items-center mb-4">
+                <div class="form-check">
+                  <input class="form-check-input" type="checkbox" id="rememberMe" name="rememberMe">
+                  <label class="form-check-label text-muted" for="rememberMe">Remember me</label>
+                </div>
+                <a href="#" class="text-decoration-none" style="color: #764ba2;">Forgot password?</a>
+              </div>
+
+              <button type="submit" class="btn btn-primary btn-login w-100 text-white mb-3">Sign In</button>
+
+              <p class="text-center text-muted mb-0">
+                Don't have an account? <a href="{% url 'signup'%}" class="text-decoration-none" style="color: #764ba2;">Sign up</a>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
