@@ -82,6 +82,9 @@ class CustomUser(AbstractBaseUser , PermissionsMixin):
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}"
 
+    def __str__(self):
+        return self.username
+
     class Meta:
         ordering = ["user_type" , "-created_at"]
         verbose_name = "User"
