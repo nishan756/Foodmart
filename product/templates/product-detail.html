@@ -1,0 +1,266 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+{{product.title}}
+{% endblock title %}
+
+{% block css %}
+<link rel='stylesheet' href="{% static 'css/product-detail.css' %}">
+
+{% endblock css %}
+{% block content %}
+
+<div class="container my-5">
+  <div class="row g-4">
+    
+    <!-- ১. Multiple Image Slider Section -->
+    <div class="col-lg-6">
+      <div id="productCarousel" class="carousel slide border rounded-3 p-2 bg-white shadow-sm" data-bs-ride="carousel">
+        
+        <!-- Extra images of product -->
+        <div class="carousel-inner rounded">
+          {% for image in product.images.all %}
+
+            <div class="carousel-item {% if forloop.first %}active{% endif %}">
+              <img src="{{ image.url }}" class="d-block w-100 product-img" alt="{{ product.title }}">
+            </div>
+
+          {% endfor %}
+          
+          <!--Default product image-->
+          <div class="carousel-item active">
+              <img src="{{ product.image.url }}" class="d-block w-100 product-img" alt="{{ product.title }}">
+          </div>
+
+        </div>
+
+        {% if product.images.count|add:1 >  1 %}
+          <!-- Controls -->
+          <button class="carousel-control-prev" type="button" data-bs-target="#productCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#productCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon bg-dark rounded-circle p-2" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        {% endif %}
+
+      </div>
+    </div>
+
+    <!-- ২. Product Main Info & Add to Cart Form -->
+    <div class="col-lg-6">
+      <div class="ps-lg-3">
+        <!-- Category & Badges -->
+        <div class="mb-2">
+          <span class="text-uppercase text-muted fw-bold small">
+            Category: 
+            {% for cat in product.category.all %}
+              <a href="{% url 'all-products' %}?category={{cat}}" class='text-decoration-none'>{{cat.title}}</a> 
+            {% endfor %}
+          </span>
+          {% if product.discount %}
+            <span class="badge bg-secondary ms-2">{{product.dicount}}% off</span>
+          {% endif %}
+        </div>
+
+        <!-- Product Title -->
+        <h2 class="fw-bold mb-2">{{product.title}}</h2>
+
+        <!-- Rating Overview -->
+        <div class="mb-3 d-flex align-items-center gap-2">
+          <div class="text-warning">
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-fill"></i>
+            <i class="bi bi-star-half"></i>
+          </div>
+          <span class="fw-bold fs-6">{{product.avg_review}}</span>
+          <span class="text-muted fs-6">({{product.total_review}})</span>
+        </div>
+
+        <!-- Price and Stock -->
+        <div class="mb-3">
+          <span class="fs-3 fw-bold text-primary">৳ {{product.applicable_price}}</span>
+          {% if product.discount > 0 %}
+            <span class="text-decoration-line-through text-muted ms-2 fs-5">৳ {{product.discount_price}}</span>
+          {% endif %}
+        </div>
+
+        <p class="mb-3">
+          <strong>Stock Status:</strong>
+          {% if product.is_active %} 
+            <span class="badge bg-success-subtle text-success border border-success">{{product.stock}} (In Stock)</span>
+          {% else %}
+            <span class="badge bg-danger-subtle text-danger border border-success">0 (Out Of Stock)</span>
+          {% endif %}
+        </p>
+
+        <hr class="my-4">
+
+        <!-- Add to Cart Form -->
+        <form method="POST" id="addToCartForm" action="{% if product.is_active %} {% url 'add-item' product.id %} {% else %} {% url 'product-request' product.id %} {% endif %}">
+
+          {% csrf_token %}
+          <div class="row g-3 align-items-center mb-4">
+
+            {% if product.is_active %}
+            <!-- Quantity Input -->
+            <div class="col-auto">
+              <label for="qty" class="form-label fw-bold me-2">Quantity:</label>
+            </div>
+
+            <div class="col-auto">
+              <div class="input-group quantity-picker" style="width: 130px;">
+                <button class="btn btn-outline-secondary" type="button" id="btn-minus">-</button>
+                <input type="number" id="qty" name="qty" class="form-control text-center" value="1" min="1" max="20" readOnly>
+                <button class="btn btn-outline-secondary" type="button" id="btn-plus">+</button>
+              </div>
+            </div>
+
+          </div>  
+
+          {% endif %}
+
+          <!-- Action Buttons -->
+          <div class="d-grid gap-2 d-md-flex">
+            {% if product.is_active %}
+              <button type="submit" class="btn btn-primary btn-lg px-4 me-md-2">
+                <i class="bi bi-cart-plus me-2"></i>Add to cart
+              </button>
+            {% else %}
+              <button type="submit" class="btn btn-success btn-lg px-4 me-md-2">
+                <i class="bi bi-cart-plus me-2"></i>Request for this product
+              </button>
+            {% endif %}
+          </div>
+        </form>
+        
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ৩. Detail Section & Review Tab Section -->
+  <div class="row mt-5">
+    <div class="col-12">
+      <ul class="nav nav-tabs" id="productTab" role="tablist">
+        <li class="nav-item" role="presentation">
+          <button class="nav-link active fw-bold" id="description-tab" data-bs-toggle="tab" data-bs-target="#description-tab-pane" type="button" role="tab">Detail</button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button class="nav-link fw-bold" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews-tab-pane" type="button" role="tab">Reviews ({{product.total_review|default:'0'}})</button>
+        </li>
+      </ul>
+
+      <div class="tab-content p-4 border border-top-0 rounded-bottom bg-white shadow-sm" id="productTabContent">
+        
+        <!-- Tab 1: Product Detail -->
+        <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" tabindex="0">
+          <p>{{product.detail|safe|default:'No details found'}}</p>
+        </div>
+
+        <!-- Tab 2: Interactive Review System -->
+        <div class="tab-pane fade" id="reviews-tab-pane" role="tabpanel" tabindex="0">
+          <div class="row g-4 align-items-start">
+            
+            <!-- Existing Reviews List -->
+            <div class="col-md-7">
+              <h5 class="fw-bold mb-3">Reviews</h5>
+              
+              <!-- Scrollable Container -->
+              <div class="review-list-container">
+                {% for review in product.reviews.all %}
+                  <div class="border-bottom pb-3 mb-3">
+                    
+                    <div class="d-flex justify-content-between align-items-center mb-1">
+                      <!-- Reviewer Name -->
+                      <h6 class="reviewer-name mb-0">
+                        {{review.user.get_full_name}}
+                        <small class="text-muted" style="font-size: 0.85rem;">( {{ review.created_at|timesince }} ago )</small>
+                      </h6>
+
+                      {% if review.user == request.user %}
+                        <!-- Delete action -->
+                        <form method="POST" action="{% url 'delete-review' review.id %}">
+                          {% csrf_token %}
+                          <button type='submit' class='btn btn-danger'>Delete</button>
+                        </form>
+                      {% endif %}
+                    </div>
+
+                    <!-- Dynamic Star Display -->
+                    <div class="star-display small mb-2">
+                      <i class="bi bi-star-fill {% if review.rating >= 1 %}active{% endif %}"></i>
+                      <i class="bi bi-star-fill {% if review.rating >= 2 %}active{% endif %}"></i>
+                      <i class="bi bi-star-fill {% if review.rating >= 3 %}active{% endif %}"></i>
+                      <i class="bi bi-star-fill {% if review.rating >= 4 %}active{% endif %}"></i>
+                      <i class="bi bi-star-fill {% if review.rating >= 5 %}active{% endif %}"></i>
+                    </div>
+
+                    <!-- Feedback Message -->
+                    <p class="mb-0 review-feedback-text">{{ review.feedback }}</p>
+
+                  </div>
+                {% empty %}
+                  <div class="py-4 text-center text-muted">
+                    <p class="mb-0">No review found. Be the first reviewer!</p>
+                  </div>  
+                {% endfor %}
+              </div>
+            </div>
+
+            <!-- Add Review Form -->
+            <div class="col-md-5">
+              <div class="card p-3 bg-light border-0">
+                <h5 class="fw-bold mb-3">Submit your review</h5>
+
+                {% if request.user.is_authenticated %}
+                  <form id="reviewForm" action="{% url 'post-review' product.id %}" method="POST">
+                    {% csrf_token %}
+                    
+                    <!-- Interactive Star Rating Input -->
+                    <div class="mb-3">
+                      <label class="form-label d-block fw-semibold">Choose rating:</label>
+                      <div class="star-rating d-inline-flex flex-row-reverse fs-4">
+                        <input type="radio" name="rating" id="star5" value="5" required><label for="star5" class="bi bi-star-fill cursor-pointer px-1"></label>
+                        <input type="radio" name="rating" id="star4" value="4"><label for="star4" class="bi bi-star-fill cursor-pointer px-1"></label>
+                        <input type="radio" name="rating" id="star3" value="3"><label for="star3" class="bi bi-star-fill cursor-pointer px-1"></label>
+                        <input type="radio" name="rating" id="star2" value="2"><label for="star2" class="bi bi-star-fill cursor-pointer px-1"></label>
+                        <input type="radio" name="rating" id="star1" value="1"><label for="star1" class="bi bi-star-fill cursor-pointer px-1"></label>
+                      </div>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="reviewComment" class="form-label fw-semibold">Feedback</label>
+                      {{ form.feedback }}
+                    </div>
+
+                    <button type="submit" class="btn btn-dark w-100">Submit</button>
+                  </form>
+                {% else %}
+                  <div class="p-3 text-center">
+                    <a href="{% url 'login' %}" class="btn btn-outline-primary btn-sm">Login to review</a>
+                  </div>
+                {% endif %}
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block js %}
+<script src="{% static 'js/product-detail.js' %}"> </script>
+{% endblock js %}
+{% endblock content %}
