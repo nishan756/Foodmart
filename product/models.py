@@ -6,6 +6,8 @@ from django_summernote.fields import SummernoteTextField
 from django.contrib.auth import get_user_model
 import uuid
 
+User = get_user_model()
+
 
 class ProductBrand(models.Model):
     name = models.CharField(max_length = 50 , unique = True)
@@ -99,9 +101,13 @@ class Product(models.Model):
     @property
     def applicable_price(self):
 
-        price = self.price - self.discount_price()
+        price = self.price - self.discount_price
 
         return price
+
+    def save(self , *args , **kwargs):
+        self.is_active = False if self.stock == 0 else True
+        return super().save(*args , **kwargs)
 
     class Meta:
         ordering = ["-created_at"]
@@ -119,7 +125,6 @@ class ProductImage(models.Model):
 
 
 class ProductReview(models.Model):
-    User = get_user_model()
 
     user = models.ForeignKey(User , on_delete = models.SET_NULL , blank = True , null = True)
 
@@ -141,3 +146,4 @@ class ProductReview(models.Model):
 
     class Meta:
         ordering = ["-created_at" , "rating"]
+        unique_together = ["user" , "product"]
