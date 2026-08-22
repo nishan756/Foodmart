@@ -1,0 +1,84 @@
+.cursor-pointer {
+  cursor: pointer;
+}
+.thumb-img {
+  opacity: 0.6;
+  transition: opacity 0.2s ease-in-out;
+}
+.thumb-img:hover,
+.thumb-img.active {
+  opacity: 1;
+  border-color: #0d6efd !important;
+}
+
+.product-img {
+  max-height: 450px;
+  object-fit: cover;
+}
+
+/* Number Input Spin Button Hide */
+input[type=number]::-webkit-inner-spin-button, 
+input[type=number]::-webkit-outer-spin-button { 
+  -webkit-appearance: none; 
+  margin: 0; 
+}
+
+/* --- Review List Specific CSS --- */
+.review-list-container {
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 12px;
+}
+
+/* Review List Star Rating Colors */
+.star-display .bi-star-fill.active {
+  color: #ffc107 !important; /* উজ্জ্বল সোনালী হলুদ */
+}
+.star-display .bi-star-fill {
+  color: #e0e0e0 !important; /* না থাকা স্টারের জন্য হালকা ধূসর */
+}
+
+.reviewer-name {
+  font-weight: 600;
+  color: #212529 !important;
+}
+
+.review-feedback-text {
+  color: #495057 !important;
+  font-size: 0.95rem;
+}
+
+/* Custom Scrollbar for Reviews */
+.review-list-container::-webkit-scrollbar {
+  width: 6px;
+}
+.review-list-container::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 10px;
+}
+
+/* --- Review Form Interactive Star Rating CSS --- */
+.star-rating input[type="radio"] {
+  display: none;
+}
+.star-rating label {
+  color: #ccc;
+  transition: color 0.2s;
+}
+.star-rating input[type="radio"]:checked ~ label,
+.star-rating label:hover,
+.star-rating label:hover ~ label {
+  color: #ffc107 !important;
+}
+
+.out-of-stock{
+  background-color:red;
+}
+
+.in-stock{
+  background-color: green;
+}
+
+.out-of-stock .in-stock{
+  color: white;
+}
