@@ -14,11 +14,17 @@ class ProductBrandAdmin(admin.ModelAdmin):
     list_per_page = 100
     list_filter = ["is_active"]
 
+class ProductImageInline(admin.StackedInline):
+    model = ProductImage
+    extra = 1
+    fields = ["image"]
+
 @admin.register(Product)
-class ProductBrandAdmin(admin.ModelAdmin):
+class ProductAdmin(admin.ModelAdmin):
     list_display = ["title" , "brand" , "price" , "discount" , "stock" , "is_active" , "is_featured"]
     list_per_page = 100
     list_filter = ["brand" , "is_active" , "is_featured"]
+    inlines = [ProductImageInline]
 
 @admin.register(ProductImage)
 class ProductImageAdmin(admin.ModelAdmin):
