@@ -38,7 +38,7 @@ class ProductBrand(models.Model):
 class ProductCategory(models.Model):
     title = models.CharField(max_length = 100)
 
-    parent = models.ForeignKey("self" , blank = True , null = True , on_delete = models.SET_NULL)
+    parent = models.ForeignKey("self" , blank = True , null = True , on_delete = models.SET_NULL , related_name = "sub_category")
 
     image = models.ImageField(blank = True , null = True , upload_to = "product/category_image")
 
@@ -72,7 +72,7 @@ class Product(models.Model):
 
     brand = models.ForeignKey(ProductBrand , blank = True , null = True , on_delete = models.SET_NULL , related_name = "brand")
 
-    category = models.ManyToManyField(ProductCategory , blank = True , related_name = "categories")
+    category = models.ManyToManyField(ProductCategory , blank = True , related_name = "products")
 
     price = models.DecimalField(default = 0.0 , help_text = "in BDT" , decimal_places = 2 , max_digits = 8 , validators = [MinValueValidator(0.0 , "Product price can't less than 0")])
 
@@ -147,3 +147,35 @@ class ProductReview(models.Model):
     class Meta:
         ordering = ["-created_at" , "rating"]
         unique_together = ["user" , "product"]
+
+class ProductRequest():
+    user = models.ForeignKey(User , on_delete = models.CASCADE , related_name = "product_requests")
+
+    product = models.ForeignKey(Product , on_delete = models.SET_NULL , blank = True , null = True , related_name = "product_requests")
+
+    # Product Snapshot
+
+    product_title = models.CharField(max_length = 200)
+
+    qty = models.PositiveIntegerField(default = 1)
+
+    brand = models.CharField(max_length = 100)
+    
+    image = models.ImageField(upload_to = "product/requested_product_image" , blank = True , null = True)
+
+    description = models.TextField(blank = True , null = True)
+
+    class StatusChoices(models.TextChoices):
+        PENDING = "pending" , "Pending"
+        REVIEWING = "reviewing" , "Reviewing"
+        AVAILABLE = "available" , "Available"
+        REJECTED = "rejected" , "Rejected"
+
+    status = models.CharField(max_length = 10 , default = "pending")
+
+    admin_note = models.TextField(blank = True , null = True)
+
+    created_at = models.DateTimeField(auto_now_add = True)
+
+    class Meta:
+        ordering = ["-created_at"]
