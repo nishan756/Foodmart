@@ -7,8 +7,8 @@
 
 {% block css %}
 <link rel='stylesheet' href="{% static 'css/product-detail.css' %}">
-
 {% endblock css %}
+
 {% block content %}
 
 <div class="container my-5">
@@ -93,9 +93,9 @@
         <p class="mb-3">
           <strong>Stock Status:</strong>
           {% if product.is_active %} 
-            <span class="badge bg-success-subtle text-success border border-success">{{product.stock}} (In Stock)</span>
+            <span class="badge in-stock">{{product.stock}} (In Stock)</span>
           {% else %}
-            <span class="badge bg-danger-subtle text-danger border border-success">0 (Out Of Stock)</span>
+            <span class='badge out-of-stock'>0 (Out Of Stock)</span>
           {% endif %}
         </p>
 
@@ -107,7 +107,6 @@
           {% csrf_token %}
           <div class="row g-3 align-items-center mb-4">
 
-            {% if product.is_active %}
             <!-- Quantity Input -->
             <div class="col-auto">
               <label for="qty" class="form-label fw-bold me-2">Quantity:</label>
@@ -116,14 +115,12 @@
             <div class="col-auto">
               <div class="input-group quantity-picker" style="width: 130px;">
                 <button class="btn btn-outline-secondary" type="button" id="btn-minus">-</button>
-                <input type="number" id="qty" name="qty" class="form-control text-center" value="1" min="1" max="20" readOnly>
+                <input type="number" id="qty" name="qty" class="form-control text-center" value="1" min="1" max="{% if product.is_active %}{{product.stock}} {% else %}20{% endif %}" readOnly>
                 <button class="btn btn-outline-secondary" type="button" id="btn-plus">+</button>
               </div>
             </div>
 
           </div>  
-
-          {% endif %}
 
           <!-- Action Buttons -->
           <div class="d-grid gap-2 d-md-flex">
