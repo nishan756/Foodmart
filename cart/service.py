@@ -3,7 +3,7 @@ from .repository import CartItemRepo , CartRepo
 from uuid import UUID
 from .models import Cart
 from product.service import ProductService
-from core.exceptions import ObjectAlreadyExists , OutOfStock
+from product.exceptions import OutOfStock
 
 
 class CartService:
@@ -36,21 +36,18 @@ class CartItemService:
         cart_item = self.get_cart_item_by_product_id(cart , id)
 
         if cart_item:
-            return self.increase_qty(id = cart_item.id , qty = qty)
+            return self.increase_qty(id = cart_item.id , cart = cart , qty = qty)
 
         return self.repo.add_item(product , cart , qty)
 
     def del_item(self , id:UUID , cart:Cart):
         return self.repo.del_item(self.get_cartitem(id , cart))
 
-    def increase_qty(self , id , qty:int):
+    def increase_qty(self , id:UUID , cart:Cart , qty:int):
         if qty <= 0:
             raise ValueError("Qty must be greater than 0")
 
-        return self.repo.increase_qty(id , qty)
+        return self.repo.increase_qty(id , cart , qty)
 
-    def decrease_qty(self , id:UUID , cart:Cart , qty:int):
-        if qty <= 0:
-            raise ValueError("Qty must be greather than 0")
-
-        return self.repo.decrease_qty(id , cart , qty)
+    def decrease_qty(self , id:UUID , cart:Cart):
+        return self.repo.decrease_qty(id , cart)

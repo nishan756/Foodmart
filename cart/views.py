@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
+from product.exceptions import OutOfStock
 
 from .service import CartItemService
 
@@ -32,10 +33,28 @@ def del_item(request , id):
 
 @login_required(login_url = "login")
 def increase_qty(request , id):
-    pass
+    try:
+        CartItemService().increase_qty(id , request.cart , qty = 1)
+        messages.success(request , "Successfully added to your cart")
+
+    except ObjectDoesNotExist as e:
+        messages.info(request , str(e))
+
+    except OutOfStock as e:
+        messages.warning(request , "This product is out of stock")
+
+    return redirect('checkout')
 
 @login_required(login_url = "login")
 def decrease_qty(request , id):
-    pass
+    try:
+        deleted = CartItemService().decrease_qty(id , request.cart)
+        messages.success(request , "Successfully decreased your product quantity" if not deleted else "Item removed from your cart")
+    
+    except ObjectDoesNotExist as e:
+        messages.info(request , str(e))
+    
+    return redirect('checkout')
+
 
 

@@ -4,7 +4,7 @@ from product.service import ProductService
 from django.core.exceptions import ObjectDoesNotExist
 from uuid import UUID
 from django.db import transaction
-from core.exceptions import OutOfStock
+from product.exceptions import OutOfStock
 
 
 class CartRepo:
@@ -38,10 +38,10 @@ class CartItemRepo:
 
 
     @transaction.atomic()
-    def increase_qty(self , id:UUID , qty:int)->None:
+    def increase_qty(self , id:UUID , cart:Cart , qty:int)->None:
 
         try:
-            cart_item = CartItem.objects.select_for_update().get(id = id)
+            cart_item = CartItem.objects.select_for_update().get(id = id , cart = cart)
 
         except CartItem.DoesNotExist:
             raise ObjectDoesNotExist("Cartitem not found")
@@ -59,26 +59,23 @@ class CartItemRepo:
         return
 
     @transaction.atomic()
-    def decrease_qty(self , id:UUID , qty:int)->None:
+    def decrease_qty(self , id:UUID , cart:Cart):
 
         try:
-            cart_item = CartItem.objects.select_for_update().get(id = id)
+            cart_item = CartItem.objects.select_for_update().get(id = id , cart = cart)
 
         except CartItem.DoesNotExist:
             raise ObjectDoesNotExist("Cartitem not found")
 
-        if cart_item.product.stock <= 0:
-            raise OutOfStock("This product is out of stock")
+        cart_item.qty -= 1
 
-        if cart_item.product.stock < qty:
-            raise ValueError("Qty must be less than or equal to stock")
-        
-
-        cart_item.qty -= qty
+        deleted = False
 
         if cart_item.qty == 0:
-            return cart_item.delete()
-
+            cart_item.delete()
+            deleted = True
+            return deleted
+        
         cart_item.save(update_fields = ["qty"])
 
-        return 
+        return deleted
