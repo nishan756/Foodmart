@@ -5,6 +5,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from uuid import UUID
 from django.db import transaction
 from product.exceptions import OutOfStock
+from django.db.models import Count , Sum
 
 
 class CartRepo:
@@ -25,6 +26,9 @@ class CartItemRepo:
 
     def get_cart_item_by_product_id(self , cart , id):
         return CartItem.objects.filter(cart = cart , product__id = id).first()
+
+    def get_user_cart_items(self , cart:Cart):
+        return CartItem.objects.filter(cart = cart)
 
     def add_item(self , product:Product , cart:Cart , qty:int)->None:
         return CartItem.objects.create(
@@ -79,3 +83,55 @@ class CartItemRepo:
         cart_item.save(update_fields = ["qty"])
 
         return deleted
+
+class OrderRepo:
+
+    def get_user_orders(self , user , **query_param):
+
+        date_from = query_param.get("date_from" , None)
+
+        date_to = query_param.get("date_to" , None)
+
+        orders = Order.objects.filter(user = user)
+
+        if date_from and date_to:
+            orders = orders.filter(created_at__date__gte = date_from , created_at__lte = date_to)
+        elif date_from:
+            orders = orders.filter(created_at__date__gte = date_from)
+        elif date_to:
+            orders = orders.filter(created_at__date__lte = date_to)
+
+        orders = orders.annotate(total_item = Count("order_items"))
+
+        return orders
+
+    @transaction.atomic()
+    def confirm_order(self , items , user , shipping_address , city , postal_code , phone_number , full_name , email):
+        order = Order.objects.create(user = user , full_name = full_name , email = email , phone_number = phone_number , shipping_address = shipping_address , city = city , postal_code = postal_code)
+
+        canceled_item = []
+
+        total_price = 0
+
+        for item in items:
+            if item.product and item.qty <= item.product.stock:
+
+                order_item = OrderItem.objects.create(user = user , product = item.product , order = order , product_title = item.product.title , product_image = item.product.image.url , unit_price = item.product.price , discount = item.product.discount , qty = item.qty , total_price = item.applicable_price())
+                total_price += item.applicable_price()
+
+                product = Product.objects.select_for_update().get(id = item.product.id)
+
+                product.stock -= item.qty
+
+                product.save(update_fields = ["stock"])
+
+            else:
+                canceled_item.append(item)
+
+            CartItemRepo().del_item(item)
+
+        order.total_price = total_price
+
+        order.save()
+
+        return canceled_item

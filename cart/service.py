@@ -1,9 +1,11 @@
 from django.utils.timezone import now
-from .repository import CartItemRepo , CartRepo
+from .repository import CartItemRepo , CartRepo , OrderRepo
 from uuid import UUID
 from .models import Cart
 from product.service import ProductService
 from product.exceptions import OutOfStock
+from django.core.paginator import Paginator
+import urllib
 
 
 class CartService:
@@ -22,6 +24,9 @@ class CartItemService:
 
     def get_cart_item_by_product_id(self , cart , id):
         return self.repo.get_cart_item_by_product_id(cart , id)
+
+    def get_user_cart_items(self , cart:Cart):
+        return self.repo.get_user_cart_items(cart)
 
     
     def add_item(self , id , cart , qty):
@@ -51,3 +56,19 @@ class CartItemService:
 
     def decrease_qty(self , id:UUID , cart:Cart):
         return self.repo.decrease_qty(id , cart)
+
+class OrderService:
+    repo = OrderRepo()
+    def get_user_orders(self , user , page , **query_param):
+
+        orders = self.repo.get_user_orders(user , **query_param)
+
+        paginator = Paginator(orders , 1)
+
+        orders = paginator.get_page(page)
+
+        return orders
+
+    
+    def confirm_order(self , items , user , shipping_address , city , postal_code , phone_number , full_name , email ):
+        return self.repo.confirm_order(items , user , shipping_address , city , postal_code , phone_number , full_name  , email)
