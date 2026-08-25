@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+My Orders
+{% endblock title %}
+
+{% block css %}
+    <link rel='stylesheet' href="{% static 'css/my-orders.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold"><i class="fa-solid fa-box-archive me-2"></i>Your Orders</h2>
+            <p class="text-muted">View your previous orders with detail</p>
+        </div>
+    </div>
+
+    <!-- Date Range Filter Section -->
+    <div class="filter-box p-3 mb-4">
+        <form class="row g-3 align-items-end" method='GET'>
+
+            {% for field in form %}
+                <div class="col-md-4">
+                    {{form.label_tag}}
+                    {{field}}
+                </div>
+            {% endfor %}
+
+            <div class="col-md-4 d-flex gap-2">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="fa-solid fa-filter me-1"></i> Filter
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Orders Table Section -->
+    <div class="card shadow-sm border-0">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col" class="ps-3">Order ID</th>
+                            <th scope="col">Order At</th>
+                            <th scope="col">Shipped At</th>
+                            <th scope="col">Number of Items</th>
+                            <th scope="col">Total Price</th>
+                            <th scope="col">Status</th>
+                            <th scope="col" class="text-end pe-3">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        {% for order in orders %}
+                            <tr>
+                                <td class="ps-3 fw-bold">{{order.get_order_id}}</td>
+                                <td>{{order.created_at}}</td>
+                                <td>{{order.shipped_at|default:"Not shipped"}}</td>
+                                <td>{{order.total_item}}</td>
+                                <td>{{order.total_price}} ৳</td>
+                                <td><span class="badge badge {{order.status}} px-2 py-1">{{order.get_status_display}}</span></td>
+                                <td class="text-end pe-3">
+                                    <a href="#" class="btn btn-sm btn-outline-secondary">Detail</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Pagination Section -->
+    <nav class="d-flex justify-content-between align-items-center mt-4" aria-label="Order pagination">
+        {% comment %}
+            <div class="text-muted small">
+                
+            </div>
+        {% endcomment %}
+        <ul class="pagination mb-0">
+            {% if orders.has_previous %}
+                <li class="page-item">
+                    <a class="page-item page-link" href="?page={{orders.previous_page_number}}" tabindex="-1">Previous</a>
+                </li>
+            {% endif %}
+
+            {% if orders.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{orders.next_page_number}}">Next</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+</div>
+{% endblock content %}

@@ -1,0 +1,40 @@
+.card-header-custom {
+            background-color: #0d6efd;
+            color: white;
+        }
+        .filter-box {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .table-hover tbody tr:hover {
+            background-color: #f1f5f9;
+        }
+
+.pending{
+    background-color: yellow;
+}
+
+.shipped{
+    background-color: green;
+}
+
+.on_the_way{
+    background-color: black;
+}
+
+.cancelled{
+    background-color: red;
+}
+
+.accepted{
+    background-color: greenyellow;
+}
+
+.accepted , .pending{
+    color: black;
+}
+
+.cancelled , .on_the_way , .shipped{
+    color: white;
+}
