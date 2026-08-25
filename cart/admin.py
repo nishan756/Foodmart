@@ -20,5 +20,5 @@ class OrderItemAdmin(admin.ModelAdmin):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ["user" , "total_price" , "status" , "created_at" , "shipped_at"]
+    list_display = ["get_order_id" , "user" , "total_price" , "status" , "created_at" , "shipped_at"]
     list_per_page = 100
