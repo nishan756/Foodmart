@@ -1,0 +1,25 @@
+.invoice-card {
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .badge-delivered { background-color: #198754; color: #fff; }
+        .info-label {
+            font-weight: 600;
+            color: #6c757d;
+        }
+        .info-value {
+            color: #212529;
+        }
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background-color: #ffffff;
+            }
+            .invoice-card {
+                box-shadow: none;
+                border: none;
+            }
+        }

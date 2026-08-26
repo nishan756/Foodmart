@@ -1,0 +1,112 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    Order Detail | {{order.get_order_id}}
+{% endblock title %}
+
+{% block css %}
+    <link rel='stylehseet' href="{% static 'css/order-detail.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container my-5">
+    
+    <div class="d-flex justify-content-between align-items-center mb-4 no-print">
+        <a href="{% url 'my-orders' %}" class="btn btn-outline-secondary">
+            <i class="fa-solid fa-arrow-left me-1"></i> Back to order list
+        </a>
+        {% comment %} <button onclick="window.print()" class="btn btn-primary">
+            <i class="fa-solid fa-print me-1"></i> প্রিন্ট ইনভয়েস
+        </button> {% endcomment %}
+    </div>
+
+    <!-- Order Detail Card -->
+    <div class="invoice-card p-4 p-md-5">
+        <!-- Header Info -->
+        <div class="row border-bottom pb-4 mb-4 align-items-center">
+            <div class="col-md-6 mb-3 mb-md-0">
+                <h3 class="fw-bold text-primary mb-1">Order Detail</h3>
+                <p class="text-muted mb-0">Order ID: <span class="fw-bold text-dark">{{order.get_order_id}}</span></p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <span class="badge badge {{order.status}} px-2 py-1">{{order.get_status_display}}</span>
+            </div>
+        </div>
+
+        <!-- Customer & Shipping Details Grid -->
+        <div class="row mb-5">
+            <!-- Customer Info -->
+            <div class="col-md-6 mb-4 mb-md-0">
+                <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-user me-2"></i>User Communication Info</h5>
+                <div class="p-3 bg-light rounded border">
+                    <p class="mb-2"><span class="info-label">Email:</span> <span class="info-value">{{order.email}}</span></p>
+                    <p class="mb-0"><span class="info-label">Phone:</span> <span class="info-value">{{order.phone_number}}</span></p>
+                </div>
+            </div>
+            <!-- Shipping & Location Info -->
+            <div class="col-md-6">
+                <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-location-dot me-2"></i>Shipping Info</h5>
+                <div class="p-3 bg-light rounded border">
+                    <p class="mb-2"><span class="info-label">Location:</span> <span class="info-value">{{order.location}}</span></p>
+                    <p class="mb-2"><span class="info-label">City:</span> <span class="info-value">{{order.city}}</span></p>
+                    <p class="mb-2"><span class="info-label">Postal Code:</span> <span class="info-value">{{order.postal_code}}</span></p>
+                    <p class="mb-2"><span class="info-label">Order Date:</span> <span class="info-value">{{order.created_at}}</span></p>
+                    <p class="mb-0"><span class="info-label">Shipped At:</span> <span class="info-value">{{order.shipped_at | default:"Not Shipped"}}</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ordered Items Table -->
+        <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-boxes-stacked me-2"></i>Order Items</h5>
+        <div class="table-responsive mb-4">
+            <table class="table table-bordered align-middle mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th scope="col" class="py-3">Item</th>
+                        <th scope="col" class="text-center py-3">Quantity</th>
+                        <th scope="col" class="text-end py-3">Unit Price</th>
+                        <th scope="col" class="text-end py-3">Discount Per Unit</th>
+                        <th scope="col" class="text-end py-3">Total Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    {% for item in order.order_items.all %}
+                        <tr>
+                            <td>
+                                <div class="fw-bold">{{item.product_title}}</div>
+                            </td>
+                            <td class="text-center">{{item.qty}}</td>
+                            <td class="text-end">৳{{item.unit_price}}</td>
+                            <td class="text-end">{{item.discount}}%</td>
+                            <td class="text-end fw-bold">৳{{item.total_price}}</td>
+                        </tr>
+                    {% endfor %}
+
+                </tbody>
+                <tfoot class="table-light">
+                    <tr>
+                        <td colspan="4" class="text-end fw-semibold">Subtotal:</td>
+                        <td class="text-end fw-semibold">৳{{order.total_price}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end fw-semibold">Shipping Charge:</td>
+                        <td class="text-end fw-semibold">৳{{order.shipping_charge}}</td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="text-end fw-bold fs-5">Grand Total:</td>
+                        <td class="text-end fw-bold fs-5 text-primary">৳{{order.total_price|add:order.shipping_charge}}</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+
+        <!-- Action / Footer Note -->
+        <div class="text-center text-muted small mt-4 pt-3 border-top no-print">
+            Thanks for shopping with us !
+        </div>
+    </div>
+</div>
+{% endblock content %}
