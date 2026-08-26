@@ -118,3 +118,14 @@ def my_orders(request):
     orders = OrderService().get_user_orders(request.user , page , **query_param)
 
     return render(request , "my-orders.html" , {"orders":orders , "form":form})
+
+@require_GET
+def order_detail(request , id):
+    try:
+        order = OrderService().get_order(id)
+        return render(request , "order-detail.html" , {"order":order})
+    
+    except ObjectDoesNotExist as e:
+        messages.info(request , str(e))
+
+    return redirect("my-orders")
