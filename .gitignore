@@ -1,5 +1,7 @@
 .env
 *.log
 db.sqlite
-settings.py
 db.sqlite3
+/media
+migrations/
+__pycache__/
