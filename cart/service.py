@@ -63,11 +63,14 @@ class OrderService:
 
         orders = self.repo.get_user_orders(user , **query_param)
 
-        paginator = Paginator(orders , 1)
+        paginator = Paginator(orders , 10)
 
         orders = paginator.get_page(page)
 
         return orders
+
+    def get_order(self , id):
+        return self.repo.get_order(id)
 
     
     def confirm_order(self , items , user , shipping_address , city , postal_code , phone_number , full_name , email ):

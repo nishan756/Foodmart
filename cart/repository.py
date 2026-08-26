@@ -105,6 +105,13 @@ class OrderRepo:
 
         return orders
 
+    def get_order(self , id):
+        try:
+            return Order.objects.prefetch_related("order_items").get(id = id)
+        except Order.DoesNotExist:
+            raise ObjectDoesNotExist("Order not found")
+        
+
     @transaction.atomic()
     def confirm_order(self , items , user , shipping_address , city , postal_code , phone_number , full_name , email):
         order = Order.objects.create(user = user , full_name = full_name , email = email , phone_number = phone_number , shipping_address = shipping_address , city = city , postal_code = postal_code)
