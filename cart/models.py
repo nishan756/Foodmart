@@ -86,6 +86,8 @@ class Order(models.Model):
 
     total_price = models.DecimalField(max_digits = 8 , decimal_places = 2 , default = Decimal("0.00"))
 
+    shipping_charge = models.PositiveIntegerField(default = 50)
+
     class OrderStatus(models.TextChoices):
         PENDING = "pending" , "Pending"
 
