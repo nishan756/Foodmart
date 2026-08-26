@@ -1,4 +1,4 @@
-from .repository import ProductRepo , ProductReviewRepo , ProductRequestRepo
+from .repository import ProductRepo , ProductReviewRepo
 from django.core.paginator import Paginator
 from .models import ProductReview
 from core.exceptions import ObjectAlreadyExists
@@ -41,7 +41,3 @@ class ProductReviewService:
 
     def delete_review(self , review_id , user):
         return self.repo.delete_review(review_id , user)
-
-class ProductRequestService:
-
-    repo = ProductRequestRepo()

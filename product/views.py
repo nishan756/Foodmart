@@ -2,7 +2,7 @@ from django.shortcuts import render , redirect
 
 from django.contrib import messages
 
-from .service import ProductService , ProductRequestService , ProductReviewService
+from .service import ProductService , ProductReviewService
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -41,11 +41,6 @@ def product_detail(request , id):
         messages.info(request , str(e))
 
     return redirect("home")
-
-@login_required(login_url = "login")
-@require_POST
-def product_request(request , id):
-    pass
 
 @login_required(login_url = "login")
 @require_POST

@@ -57,6 +57,17 @@ class ProductRepo:
         except Product.DoesNotExist:
             raise ObjectDoesNotExist("Product not found")
 
+    def decrease_stock(self , qty:int):
+        try:
+            product = Product.objects.select_for_update().get(id = id)
+
+            product.stock -= qty
+
+            product.save(update_fields = ["stock"])
+
+        except Product.DoesNotExist:
+            raise ObjectDoesNotExist("Product not found")
+
 class ProductReviewRepo:
 
     def get_user_review(self , product_id , user):
@@ -70,5 +81,3 @@ class ProductReviewRepo:
             ProductReview.objects.get(id = review_id , user = user).delete()
         except Product.DoesNotExist:
             raise ObjectDoesNotExist()
-
-class ProductRequestRepo:pass

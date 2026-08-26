@@ -147,35 +147,3 @@ class ProductReview(models.Model):
     class Meta:
         ordering = ["-created_at" , "rating"]
         unique_together = ["user" , "product"]
-
-class ProductRequest():
-    user = models.ForeignKey(User , on_delete = models.CASCADE , related_name = "product_requests")
-
-    product = models.ForeignKey(Product , on_delete = models.SET_NULL , blank = True , null = True , related_name = "product_requests")
-
-    # Product Snapshot
-
-    product_title = models.CharField(max_length = 200)
-
-    qty = models.PositiveIntegerField(default = 1)
-
-    brand = models.CharField(max_length = 100)
-    
-    image = models.ImageField(upload_to = "product/requested_product_image" , blank = True , null = True)
-
-    description = models.TextField(blank = True , null = True)
-
-    class StatusChoices(models.TextChoices):
-        PENDING = "pending" , "Pending"
-        REVIEWING = "reviewing" , "Reviewing"
-        AVAILABLE = "available" , "Available"
-        REJECTED = "rejected" , "Rejected"
-
-    status = models.CharField(max_length = 10 , default = "pending")
-
-    admin_note = models.TextField(blank = True , null = True)
-
-    created_at = models.DateTimeField(auto_now_add = True)
-
-    class Meta:
-        ordering = ["-created_at"]

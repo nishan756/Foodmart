@@ -1,6 +1,6 @@
 from .repository import UserRepo , User
 from django.db.models import Q
-from common.exceptions import ObjectAlreadyExists
+from core.exceptions import ObjectAlreadyExists
 
 class UserService:
     repo = UserRepo()

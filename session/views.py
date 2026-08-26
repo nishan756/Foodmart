@@ -13,7 +13,7 @@ from .backends import CustomBackend
 from .service import UserService
 
 # =======Exceptions===========
-from common.exceptions import ObjectAlreadyExists
+from core.exceptions import ObjectAlreadyExists
 
 
 user_service = UserService()

@@ -102,7 +102,7 @@
         <hr class="my-4">
 
         <!-- Add to Cart Form -->
-        <form method="POST" id="addToCartForm" action="{% if product.is_active %} {% url 'add-item' product.id %} {% else %} {% url 'product-request' product.id %} {% endif %}">
+        <form method="POST" id="addToCartForm" action="{% if product.is_active %} {% url 'add-item' product.id %} {% else %} {% url 'internal-product-request' product.id %} {% endif %}">
 
           {% csrf_token %}
           <div class="row g-3 align-items-center mb-4">
