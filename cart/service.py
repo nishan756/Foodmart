@@ -19,7 +19,7 @@ class CartItemService:
 
     repo = CartItemRepo()
 
-    def get_cartitem_by_cart_id(self , id , cart):
+    def get_cartitem(self , id , cart):
         return self.repo.get_cartitem(id , cart)
 
     def get_cart_item_by_product_id(self , cart , id):
