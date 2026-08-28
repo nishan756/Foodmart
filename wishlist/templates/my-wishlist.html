@@ -1,0 +1,118 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+    My Wishlist
+{% endblock title %}
+
+{% block css %}
+    <link rel='stylesheet' href="{% static 'css/my-wishlist.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="container my-5">
+
+    <!-- Search Bar -->
+    <div class="search-box">
+        <form class="row g-3 align-items-center" method="GET" id="searchForm" action="{% url 'my-wishlist' %}">
+
+            <div class="col-md-8 col-lg-9">
+                <div class="input-group">
+                    <span class="input-group-text bg-white text-muted border-end-0">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </span>
+                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Search via product title" value="{{request.GET.title}}" name="title" id='searchInput' oninput="performAutoSearch()">
+                    
+                </div>
+            </div>
+
+            <div class="col-md-4 col-lg-3 d-flex gap-2">
+
+                <button type="button" class="btn btn-secondary w-100 fw-semibold" onclick="clearSearchInput()" id="clearBtn">
+                    Clear
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- Wishlist Product Grid -->
+    <div class="row g-4" id="wishlistContainer">
+        
+        <!-- Product Card -->
+
+        {% for item in wishlist_items %}
+            <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+                <div class="product-card">
+                    <div class="product-img-wrapper">
+                        <img src="{{item.product.image.url}}" alt="Headphone" class="product-img">
+                        <span class="badge bg-success stock-badge"></span>
+                        <form method="POST" action="{% url 'delete-from-wishlist' item.id %}" id='itemDeletionForm'>
+                            {% csrf_token %}
+                            <button class="remove-wishlist-btn">
+                                <i class="bi bi-heart-fill"></i>
+                            </button>
+                        <form>
+                    </div>
+                    <div class="product-card-body">
+                        <span class="text-uppercase text-muted fw-bold small">
+                            Categort:
+                            {% for cat in item.product.category.all|slice:'1' %}
+                                <a href="{% url 'all-products' %}?category={{cat.title.lower}}" class='text-text-decoration-line-through'>{{cat.title}}</a>
+                            {% endfor %}
+                        </span>
+                        <a href="{% url 'product-detail' item.product.id %}" class="product-title">{{item.product.title}}</a>
+                        <div class="price-container">
+                            {% if item.product.discount > 0 %}
+                                <span class="current-price">৳{{item.product.applicable_price}}</span>
+                            {% endif %}
+                            <span class="original-price">৳{{item.product.price}}</span>
+                        </div>
+
+                        <a href="{% url 'product-detail' item.product.id %}" class="btn btn-secondary btn-lg px-4 me-md-2">
+                            <i class="bi-eye"></i>View Product
+                        </a>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+
+            <h2 class='text-center'>No item found</h2>
+        
+        {% endfor %}
+
+
+        <!-- Pagination Section -->
+        <nav class="d-flex justify-content-between align-items-center mt-5 flex-wrap gap-3" aria-label="Wishlist pagination">
+            
+            <ul class="pagination mb-0">
+                {% if wishlist_items.has_previous %}
+
+                    <li class="page-item disabled">
+                        <a class="page-link" href="?page={{wishlist_items.previous_page_number}}" tabindex="-1" aria-disabled="true">
+                            <i class="fa-solid fa-chevron-left me-1"></i> Prev
+                        </a>
+                    </li>
+
+                {% endif %}
+
+                {% if wishlist_items.has_previous %}
+
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{wishlist_items.next_page_number}}">
+                            <i class="fa-solid fa-chevron-right ms-1"></i>Next
+                        </a>
+                    </li>
+
+                {% endif %}
+
+            </ul>
+        </nav>
+</div>
+
+{% block js %}
+    <script src="{% static 'js/my-wishlist.js' %}"></script>
+{% endblock js %}
+
+{% endblock content %}
