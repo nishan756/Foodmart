@@ -30,7 +30,18 @@ def add_item(request , id):
 @login_required(login_url = "login")
 @require_POST
 def del_item(request , id):
-    pass
+
+    try:
+        CartItemService().del_item(id , request.cart)
+        messages.success(request , "Successfully removed item from your cart")
+
+    except ObjectDoesNotExist as e:
+        messages.warning(request , str(e))
+
+    except Exception as e:
+        messages.error(request , "Something went wrong")
+
+    return redirect("checkout")
 
 @login_required(login_url = "login")
 @require_POST
