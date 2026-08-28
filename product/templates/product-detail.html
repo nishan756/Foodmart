@@ -23,7 +23,7 @@
           {% for image in product.images.all %}
 
             <div class="carousel-item {% if forloop.first %}active{% endif %}">
-              <img src="{{ image.url }}" class="d-block w-100 product-img" alt="{{ product.title }}">
+              <img src="{{ image.image.url }}" class="d-block w-100 product-img" alt="{{ product.title }}">
             </div>
 
           {% endfor %}
@@ -132,18 +132,8 @@
                 <img src="{% static 'icons/please.png' %}" class='icon'> Request for this product
               </button>
             {% endif %}
-              <form action="{% url 'add-to-wishlist' product.id %}" method="POST">
-
-                {% csrf_token %}
-
-                <button type="submit" class="btn btn-secondary btn-lg px-4 me-md-2">
-                    <i class="bi bi-heart"></i> Add to wishlist
-                </button>
-
-              </form>
           </div>
         </form>
-        
 
       </div>
     </div>
