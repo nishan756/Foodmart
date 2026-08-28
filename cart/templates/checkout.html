@@ -52,6 +52,13 @@ Checkout
                     
                     </div>
                     <span class="fw-bold text-nowrap">৳<span class="item-total">{{item.applicable_price}}</span></span>
+
+                    <form method='POST' action="{% url 'del-item' item.id %}">
+                        {% csrf_token %}
+                        <button class="btn btn-outline-danger" type="submit" style='margin-left:10px;'>
+                          <i class="bi bi-x"></i>
+                        </button>
+                    </form>
                 </div>
                 </li>
             {% empty %}
@@ -59,7 +66,7 @@ Checkout
             {% endfor %}
           </ul>
 
-          <!-- কস্ট সামারি -->
+          <!-- Cost Summury -->
           <div class="border-top pt-3">
             <div class="d-flex justify-content-between mb-2">
               <span class="text-muted">Subtotal</span>
