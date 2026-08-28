@@ -61,9 +61,7 @@
               <a href="{% url 'all-products' %}?category={{cat}}" class='text-decoration-none'>{{cat.title}}</a> 
             {% endfor %}
           </span>
-          {% if product.discount %}
-            <span class="badge bg-secondary ms-2">{{product.dicount}}% off</span>
-          {% endif %}
+
         </div>
 
         <!-- Product Title -->
@@ -86,7 +84,8 @@
         <div class="mb-3">
           <span class="fs-3 fw-bold text-primary">৳ {{product.applicable_price}}</span>
           {% if product.discount > 0 %}
-            <span class="text-decoration-line-through text-muted ms-2 fs-5">৳ {{product.discount_price}}</span>
+            <span class="text-decoration-line-through text-muted ms-2 fs-5">৳ {{product.price}}</span>
+            <span class="badge bg-primary ms-2">{{product.discount}}% off</span>
           {% endif %}
         </div>
 
@@ -102,7 +101,7 @@
         <hr class="my-4">
 
         <!-- Add to Cart Form -->
-        <form method="POST" id="addToCartForm" action="{% if product.is_active %} {% url 'add-item' product.id %} {% else %} {% url 'internal-product-request' product.id %} {% endif %}">
+        <form method="POST" id="addToCartForm" action="{% if product.is_active %} {% url 'add-item' product.id %}{% endif %}">
 
           {% csrf_token %}
           <div class="row g-3 align-items-center mb-4">
@@ -129,10 +128,19 @@
                 <i class="bi bi-cart-plus me-2"></i>Add to cart
               </button>
             {% else %}
-              <button type="submit" class="btn btn-success btn-lg px-4 me-md-2">
-                <i class="bi bi-cart-plus me-2"></i>Request for this product
+              <button type="submit" class="btn btn-primary btn-lg px-4 me-md-2">
+                <img src="{% static 'icons/please.png' %}" class='icon'> Request for this product
               </button>
             {% endif %}
+              <form action="{% url 'add-to-wishlist' product.id %}" method="POST">
+
+                {% csrf_token %}
+
+                <button type="submit" class="btn btn-secondary btn-lg px-4 me-md-2">
+                    <i class="bi bi-heart"></i> Add to wishlist
+                </button>
+
+              </form>
           </div>
         </form>
         
@@ -157,7 +165,7 @@
         
         <!-- Tab 1: Product Detail -->
         <div class="tab-pane fade show active" id="description-tab-pane" role="tabpanel" tabindex="0">
-          <p>{{product.detail|safe|default:'No details found'}}</p>
+          <p>{{product.description|safe|default:'No details found'}}</p>
         </div>
 
         <!-- Tab 2: Interactive Review System -->
