@@ -5,6 +5,7 @@ from django.core.validators import MaxValueValidator , MinValueValidator
 from django_summernote.fields import SummernoteTextField
 from django.contrib.auth import get_user_model
 import uuid
+from math import ceil
 
 User = get_user_model()
 
@@ -103,7 +104,7 @@ class Product(models.Model):
 
         price = self.price - self.discount_price
 
-        return price
+        return ceil(price)
 
     def save(self , *args , **kwargs):
         self.is_active = False if self.stock == 0 else True
