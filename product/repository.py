@@ -32,10 +32,18 @@ class ProductRepo:
             products = products.filter(title__icontains = title)
 
         if min_price and max_price:
-            products = products.filter(price__lte = min_price , price__gte = max_price)
+            products = products.filter(price__gte = min_price , price__lte = max_price)
+
+        elif min_price:
+            products = products.filter(price__gte = min_price)
+
+        elif max_price:
+            products = products.filter(price__lte = max_price)
 
         if category:
-            products = products.filter(category__title__iexact = category)
+            products = products.filter(category__id = category)
+
+        products = products.annotate(avg_rating = Avg("reviews__rating"))
 
         return products.order_by(order_by)
 
