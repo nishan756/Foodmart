@@ -22,9 +22,15 @@ def home(request):
 def all_products(request):
     query = request.GET.dict()
 
-    page = query.pop("page" , 1)
+    page = query.pop("page" , 1) 
 
     per_page = query.pop("per_page" , 100)
+
+    try:page = int(page)
+    except (ValueError , TypeError):page = 1
+
+    try:per_page = int(per_page)
+    except(ValueError , TypeError):per_page = 100
 
     products = ProductService().all_products(page , per_page , query)
 
