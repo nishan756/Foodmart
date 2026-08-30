@@ -101,6 +101,8 @@ Home
       </div>
     </section>
 
+    <!--Product Category Section-->
+
     <section class="py-5 overflow-hidden">
       <div class="container-fluid">
         <div class="row">
@@ -110,7 +112,6 @@ Home
               <h2 class="section-title">Category</h2>
 
               <div class="d-flex align-items-center">
-                <a href="#" class="btn-link text-decoration-none">View All Categories →</a>
                 <div class="swiper-buttons">
                   <button class="swiper-prev category-carousel-prev btn btn-yellow">❮</button>
                   <button class="swiper-next category-carousel-next btn btn-yellow">❯</button>
@@ -125,54 +126,13 @@ Home
 
             <div class="category-carousel swiper">
               <div class="swiper-wrapper">
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-bread-baguette.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Breads & Sweets</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-soft-drinks-bottle.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-wine-glass-bottle.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-animal-products-drumsticks.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-bread-herb-flour.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
-                <a href="index.html" class="nav-link category-item swiper-slide">
-                  <img src="images/icon-vegetables-broccoli.png" alt="Category Thumbnail">
-                  <h3 class="category-title">Fruits & Veges</h3>
-                </a>
+
+                {% for cat in categories %}
+                  <a href="{% url 'all-products' %}?category={{cat.id}}" class="nav-link category-item swiper-slide">
+                    <img src="{{cat.image.url}}" alt="{{cat.title}}" class='img-thumbnail'>
+                    <h3 class="category-title">{{cat.title}}</h3>
+                  </a>
+                {% endfor %}
                 
               </div>
             </div>
@@ -183,6 +143,7 @@ Home
     </section>
 
 
+    <!--Brand section-->
     <section class="py-5 overflow-hidden">
       <div class="container-fluid">
         <div class="row">
@@ -190,10 +151,12 @@ Home
 
             <div class="section-header d-flex flex-wrap flex-wrap justify-content-between mb-5">
               
-              <h2 class="section-title">Newly Arrived Brands</h2>
+              <h2 class="section-title">Brands</h2>
 
               <div class="d-flex align-items-center">
-                <a href="#" class="btn-link text-decoration-none">View All Categories →</a>
+                {% comment %}
+                <a href="#" class="btn-link text-decoration-none">View All Brands →</a>
+                {% endcomment %}
                 <div class="swiper-buttons">
                   <button class="swiper-prev brand-carousel-prev btn btn-yellow">❮</button>
                   <button class="swiper-next brand-carousel-next btn btn-yellow">❯</button>
@@ -208,97 +171,23 @@ Home
 
             <div class="brand-carousel swiper">
               <div class="swiper-wrapper">
-                
+
+                {% for brand in brands %}
                 <div class="swiper-slide">
                   <div class="card mb-3 p-3 rounded-4 shadow border-0">
                     <div class="row g-0">
                       <div class="col-md-4">
-                        <img src="images/product-thumb-11.jpg" class="img-fluid rounded" alt="Card title">
+                        <img src="{{brand.logo.url}}" class="img-fluid rounded" alt="{{brand.name}}">
                       </div>
-                      <div class="col-md-8">
+                      <div class="col-md-6">
                         <div class="card-body py-0">
-                          <p class="text-muted mb-0">Amber Jar</p>
-                          <h5 class="card-title">Honey best nectar you wish to get</h5>
+                          <p class="text-muted mb-0">{{brand.name}}</p>
                         </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="swiper-slide">
-                  <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                    <div class="row g-0">
-                      <div class="col-md-4">
-                        <img src="images/product-thumb-12.jpg" class="img-fluid rounded" alt="Card title">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="card-body py-0">
-                          <p class="text-muted mb-0">Amber Jar</p>
-                          <h5 class="card-title">Honey best nectar you wish to get</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="swiper-slide">
-                  <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                    <div class="row g-0">
-                      <div class="col-md-4">
-                        <img src="images/product-thumb-13.jpg" class="img-fluid rounded" alt="Card title">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="card-body py-0">
-                          <p class="text-muted mb-0">Amber Jar</p>
-                          <h5 class="card-title">Honey best nectar you wish to get</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="swiper-slide">
-                  <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                    <div class="row g-0">
-                      <div class="col-md-4">
-                        <img src="images/product-thumb-14.jpg" class="img-fluid rounded" alt="Card title">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="card-body py-0">
-                          <p class="text-muted mb-0">Amber Jar</p>
-                          <h5 class="card-title">Honey best nectar you wish to get</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="swiper-slide">
-                  <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                    <div class="row g-0">
-                      <div class="col-md-4">
-                        <img src="images/product-thumb-11.jpg" class="img-fluid rounded" alt="Card title">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="card-body py-0">
-                          <p class="text-muted mb-0">Amber Jar</p>
-                          <h5 class="card-title">Honey best nectar you wish to get</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div class="swiper-slide">
-                  <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                    <div class="row g-0">
-                      <div class="col-md-4">
-                        <img src="images/product-thumb-12.jpg" class="img-fluid rounded" alt="Card title">
-                      </div>
-                      <div class="col-md-8">
-                        <div class="card-body py-0">
-                          <p class="text-muted mb-0">Amber Jar</p>
-                          <h5 class="card-title">Honey best nectar you wish to get</h5>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                {% endfor %}
                 
               </div>
             </div>
