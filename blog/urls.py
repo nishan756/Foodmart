@@ -3,5 +3,5 @@ from django.urls import path
 
 urlpatterns = [
     path('all/' , all_blogs , name = "all-blogs"),
-    path('<str:slug>/' , blog_detail , name = "blog-detail"),
+    path('detail/<str:slug>/' , blog_detail , name = "blog-detail"),
 ]
