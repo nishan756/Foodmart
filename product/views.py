@@ -2,7 +2,7 @@ from django.shortcuts import render , redirect
 
 from django.contrib import messages
 
-from .service import ProductService , ProductReviewService
+from .service import ProductService , ProductReviewService , ProductBrandService
 
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -17,7 +17,9 @@ from core.exceptions import ObjectAlreadyExists
 from django.utils.http import url_has_allowed_host_and_scheme
 
 def home(request):
-    return render(request , "home.html")
+    brands = ProductBrandService().all_brands()
+    context = {"brands":brands}
+    return render(request , "home.html" , context)
 
 def all_products(request):
     query = request.GET.dict()
