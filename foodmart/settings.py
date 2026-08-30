@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'product',
     'cart',
     'wishlist',
+    'blog',
     'django_summernote'
 ]
 
