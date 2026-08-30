@@ -6,6 +6,107 @@
 {{blog.title}}
 {% endblock title %}
 
-{% block content %}
+{% block css %}
+    <link rel='stylesheet' href="{% static 'css/blog-detail.css' %}">
+{% endblock css %}
 
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-9">
+            
+            <!-- 1. Blog Header Section -->
+            <header class="blog-header text-center">
+                
+                <!-- Blog Title -->
+                <h1 class="blog-title mb-4">
+                    {{blog.title}}
+                </h1>
+
+                <!-- Blog Meta (Date, Author, Reading time) -->
+                <div class="blog-meta d-flex justify-content-center align-items-center gap-3 flex-wrap">
+                    {% comment %}
+                    <div class="d-flex align-items-center gap-2">
+                        <img src="" alt="Author">
+                        <span class="fw-bold text-dark">{{blog.author.full_name}}</span>
+                    </div>
+                    <span>•</span>
+                    {% endcomment %}
+                    <div>
+                        <i class="fa-regular fa-calendar me-1"></i> {{blog.created_at|date}} | {{blog.created_at|time}}
+                    </div>
+                </div>
+            </header>
+
+            <!-- 2. Blog Banner Image -->
+            {% if blog.banner %}
+                <div class="banner-container">
+                    <img src="{{blog.banner.url}}" style='max-width:600px; max-height:600px;'>
+                </div>
+            {% endif %}
+
+            <!-- 3. Blog Detail Content -->
+            <article class="blog-content">
+                <p>{{blog.description|safe}}</p>
+
+                <!-- Tags & Social Share Section -->
+                <div class="pt-4 mt-5 border-top d-flex justify-content-between align-items-center flex-wrap gap-3">
+                    {% if blog.tags.count > 0 %}
+                        <div class="tags">
+                            <span class="fw-bold text-muted me-2"><i class="fa-solid fa-tags"></i> Tags:</span>
+                            {% for tag in blog.tags.all %}
+                                <a href="{% url 'all-blogs' %}?tag={{tag.title}}" class="badge bg-light text-dark border text-decoration-none me-1">{{tag.title}}</a>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <!--This will implemented in future -->
+                    {% comment %}
+                    <div class="share-buttons d-flex align-items-center gap-2">
+                        <span class="fw-bold text-muted me-1">Share:</span>
+                        <a href="" class="btn btn-outline-primary btn-sm">
+                            <i class="bi bi-facebook"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-info btn-sm"><i class="bi bi-twitter-x"></i></a>
+                        <a href="#" class="btn btn-outline-danger btn-sm"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                    {% endcomment %}
+                </div>
+            </article>
+
+            <!-- 4. Related Blogs Section -->
+            
+            {% comment %}
+            <div class="mt-5">
+                <h3 class="fw-bold mb-4">Read more</h3>
+                <div class="row g-4">
+                    <!-- Related Card 1 -->
+                    <div class="col-md-6">
+                        <div class="related-card p-3 d-flex flex-column">
+                            <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=500&q=80" class="related-img rounded mb-3" alt="Related post">
+                            <small class="text-primary fw-bold">প্রোগ্রামিং</small>
+                            <h5 class="fw-bold mt-1">
+                                <a href="#" class="text-dark text-decoration-none">জাভাস্ক্রিপ্ট শেখার সঠিক গাইডলাইন ২০২৬</a>
+                            </h5>
+                            <small class="text-muted mt-auto pt-2"><i class="fa-regular fa-calendar"></i> ২৫ আগস্ট, ২০২৬</small>
+                        </div>
+                    </div>
+                    <!-- Related Card 2 -->
+                    <div class="col-md-6">
+                        <div class="related-card p-3 d-flex flex-column">
+                            <img src="https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?w=500&q=80" class="related-img rounded mb-3" alt="Related post">
+                            <small class="text-primary fw-bold">ইউআই/ইউএক্স</small>
+                            <h5 class="fw-bold mt-1">
+                                <a href="#" class="text-dark text-decoration-none">ডিজাইনে সঠিক কালার প্যালেট নির্বাচনের উপায়</a>
+                            </h5>
+                            <small class="text-muted mt-auto pt-2"><i class="fa-regular fa-calendar"></i> ২০ আগস্ট, ২০২৬</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endcomment %}
+
+        </div>
+    </div>
+</div>
 {% endblock content %}
