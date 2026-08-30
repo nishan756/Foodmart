@@ -26,6 +26,8 @@ class Blog(models.Model):
 
     banner = models.ImageField(upload_to = "blog_image" , blank = True , null = True)
 
+    tags = models.ManyToManyField(BlogTag)
+
     short_description = models.TextField(max_length = 200)
 
     description = SummernoteTextField()
