@@ -2,6 +2,7 @@ from .models import Product , ProductReview , ProductBrand
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q , Prefetch , Count , Sum , Avg
 from cart.models import OrderItem
+from datetime import timedelta , datetime
 
 
 class ProductBrandRepo:
@@ -12,13 +13,26 @@ class ProductBrandRepo:
 class ProductRepo:
 
     def top_selling_products(self):
-        products = OrderItem.objects.values("product").annotate(
-            total_sold = Sum("qty"),
-        ).order_by("-total_sold")
-
+        products = OrderItem.objects.prefetch_related("product__reviews")\
+            .values("product" , "product__id" , "product__title" , "product__discount" , "product__price" , "product__image")\
+            .annotate(
+                total_sold = Sum("qty"),
+                avg_review = Avg("product__reviews__rating" , default = 0.0)
+            )\
+            .order_by("-total_sold")
+        
         return products
 
-    def all_poroducts(self , query:dict):
+    def newly_arrived_products(self):
+        today = datetime.today().date()
+
+        last_7_days = today - timedelta(days = 7)
+
+        products = Product.objects.filter(created_at__date__gte = last_7_days).annotate(avg_review = Avg("reviews__rating" , default = 0))
+
+        return products.order_by("-created_at")
+
+    def all_products(self , query:dict):
 
         products = Product.objects.all()
 

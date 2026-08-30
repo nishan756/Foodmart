@@ -13,6 +13,12 @@ class ProductBrandService:
 class ProductService:
     repo = ProductRepo()
 
+    def top_selling_products(self):
+        return self.repo.top_selling_products()
+
+    def newly_arrived_products(self):
+        return self.repo.newly_arrived_products()
+
     def all_products(self , page:int , per_page:int , query:dict):
 
         supported_query_param = {"order_by" , "min_price" , "max_price" , "title" , "category"}
@@ -24,7 +30,7 @@ class ProductService:
         if query.get("order_by"):
             query["order_by"] = query["order_by"] if query["order_by"] in supported_ordering_param else query.pop("order_by")
 
-        products =  self.repo.all_poroducts(query)
+        products =  self.repo.all_products(query)
 
         paginator = Paginator(products , per_page)
 
