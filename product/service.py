@@ -1,8 +1,13 @@
-from .repository import ProductRepo , ProductReviewRepo
+from .repository import ProductRepo , ProductReviewRepo , ProductBrandRepo
 from django.core.paginator import Paginator
 from .models import ProductReview
 from core.exceptions import ObjectAlreadyExists
-from django.core.exceptions import ObjectDoesNotExist
+
+class ProductBrandService:
+    repo = ProductBrandRepo()
+
+    def all_brands(self):
+        return self.repo.all_brands()
 
 
 class ProductService:
