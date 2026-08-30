@@ -16,9 +16,18 @@ from core.exceptions import ObjectAlreadyExists
 
 from django.utils.http import url_has_allowed_host_and_scheme
 
+from blog.service import BlogService
+
 def home(request):
     brands = ProductBrandService().all_brands()
-    context = {"brands":brands}
+
+    top_selling_products = ProductService().top_selling_products()
+
+    newly_arrived_products = ProductService().newly_arrived_products()
+
+    recent_blogs = BlogService().recent_blogs()
+
+    context = {"brands":brands , "top_selling_products":top_selling_products , "newly_arrived_products":newly_arrived_products , "recent_blogs":recent_blogs}
     return render(request , "home.html" , context)
 
 def all_products(request):
