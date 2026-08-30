@@ -14,7 +14,7 @@ class OrderForm(forms.ModelForm):
             
     class Meta:
         model = Order
-        exclude = ["user" , "total_price" , "status" , "created_at" , "shipped_at"]
+        exclude = ["user" , "total_price" , "status" , "created_at" , "shipped_at" , "shipping_charge"]
 
 class OrderFilterForm(forms.Form):
     date_from = forms.DateField(
@@ -30,5 +30,4 @@ class OrderFilterForm(forms.Form):
         for name , field in self.fields.items():
             field.widget.attrs.update({"class":"form-control" , "id":name})
             field.label_suffix = ""
-            print(name)
 
