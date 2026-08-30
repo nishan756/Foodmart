@@ -1,7 +1,7 @@
 from .repository import BlogRepo
 from django.core.paginator import Paginator
 
-class BlogServie:
+class BlogService:
 
     repo = BlogRepo()
 
@@ -15,6 +15,9 @@ class BlogServie:
         blogs = paginator.get_page(page)
 
         return blogs
+
+    def recent_blogs(self):
+        return self.repo.recent_blogs()
 
     def get_blog_detail(self , slug:str):
         return self.repo.get_blog_detail(slug)
