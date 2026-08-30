@@ -28,8 +28,6 @@ class Blog(models.Model):
 
     tags = models.ManyToManyField(BlogTag)
 
-    short_description = models.TextField(max_length = 200)
-
     description = SummernoteTextField()
 
     created_at = models.DateTimeField(auto_now_add = True)
