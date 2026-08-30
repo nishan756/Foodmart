@@ -13,7 +13,7 @@ class BlogRepo:
 
     def get_blog_detail(self , slug:str):
         try:
-            return Blog.objects.get(slug = slug)
+            return Blog.objects.prefetch_related("tags").get(slug = slug)
 
         except Blog.DoesNotExist:
             raise ObjectDoesNotExist("Blog not found")
