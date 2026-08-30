@@ -1,6 +1,22 @@
 from django.db import models
 from django_summernote.fields import SummernoteTextField
 from django.utils.text import slugify
+from django.core.exceptions import ValidationError
+
+
+
+class BlogTag(models.Model):
+    title = models.CharField(max_length = 20)
+
+    def __str__(self):
+        return self.title
+
+    def clean(self):
+        queryset = BlogTag.objects.filter(title__iexact = self.title)
+        if self.pk:
+            queryset = queryset.exclude(pk = self.pk)
+        if queryset:
+            raise ValidationError("Tag with this title is already exists")
 
 
 class Blog(models.Model):
