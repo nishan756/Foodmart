@@ -1,5 +1,5 @@
 from django.shortcuts import render , redirect
-from .service import BlogServie
+from .service import BlogService
 from django.views.decorators.http import require_GET
 from django.contrib import messages
 from django.core.exceptions import ObjectDoesNotExist
@@ -19,7 +19,7 @@ def all_blogs(request):
     try:per_page = int(per_page)
     except(ValueError , TypeError):per_page = 100
 
-    try:blogs = BlogServie().all_blogs(page , per_page , query);return render(request , "all-blogs.html" , {"blogs":blogs})
+    try:blogs = BlogService().all_blogs(page , per_page , query);return render(request , "all-blogs.html" , {"blogs":blogs})
     except Exception:messages.error(request , "Something went wrong in this page. Try again later")
 
     return redirect("all-products")
@@ -28,7 +28,7 @@ def all_blogs(request):
 def blog_detail(request , slug):
 
     
-    try:blog = BlogServie().get_blog_detail(slug);return render(request , "blog-detail.html" , {"blog":blog})
+    try:blog = BlogService().get_blog_detail(slug);return render(request , "blog-detail.html" , {"blog":blog})
     except ObjectDoesNotExist as e:messages.info(request , str(e))
 
     return redirect("all-blogs")
