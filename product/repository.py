@@ -1,9 +1,14 @@
-from .models import Product , ProductReview
+from .models import Product , ProductReview , ProductBrand
 from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q , Prefetch , Count , Sum , Avg
 from cart.models import OrderItem
-from django.core.exceptions import MultipleObjectsReturned
 
+
+class ProductBrandRepo:
+
+    def all_brands(self):
+        return ProductBrand.objects.filter(is_active = True).order_by("-created_at")
+    
 class ProductRepo:
 
     def top_selling_products(self):
@@ -88,4 +93,4 @@ class ProductReviewRepo:
         try:
             ProductReview.objects.get(id = review_id , user = user).delete()
         except Product.DoesNotExist:
-            raise ObjectDoesNotExist()
+            raise ObjectDoesNotExist("Review not found")
