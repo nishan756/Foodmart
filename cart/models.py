@@ -5,7 +5,7 @@ import uuid
 from product.models import Product
 from django.core.validators import MinValueValidator
 from decimal import Decimal
-import datetime
+from django.utils.timezone import now
 
 
 User = get_user_model()
@@ -114,9 +114,11 @@ class Order(models.Model):
         return _id
 
     def save(self , *args , **kwargs):
-        status = self.status
-        if status == "shipped":
-            self.shipped_at = datetime.date.today()
+
+        if self.status == "shipped" and self.shipped_at is None:
+
+            self.shipped_at = now()
+
         super().save(*args , **kwargs)
 
     class Meta:
