@@ -128,7 +128,7 @@ Home
               <div class="swiper-wrapper">
 
                 {% for cat in categories %}
-                  <a href="{% url 'all-products' %}?category={{cat.id}}" class="nav-link category-item swiper-slide">
+                  <a href="{% url 'all-products' %}?category={{cat.title.lower}}" class="nav-link category-item swiper-slide">
                     <img src="{{cat.image.url}}" alt="{{cat.title}}" class='img-thumbnail'>
                     <h3 class="category-title">{{cat.title}}</h3>
                   </a>
@@ -171,22 +171,21 @@ Home
 
             <div class="brand-carousel swiper">
               <div class="swiper-wrapper">
-
                 {% for brand in brands %}
-                <div class="swiper-slide">
-                  <div class="card mb-3 p-3 rounded-4 shadow border-0">
-                    <div class="row g-0">
-                      <div class="col-md-4">
-                        <img src="{{brand.logo.url}}" class="img-fluid rounded" alt="{{brand.name}}">
-                      </div>
-                      <div class="col-md-6">
-                        <div class="card-body py-0">
-                          <p class="text-muted mb-0">{{brand.name}}</p>
+                  <div class="swiper-slide">
+                    <div class="card mb-3 p-3 rounded-4 shadow border-0">
+                      <div class="row g-0">
+                        <div class="col-md-4">
+                          <a href="{% url 'all-products'%}?brand={{brand.name.lower}}"><img src="{{brand.logo.url}}" class="img-fluid rounded" alt="{{brand.name}}"></a>
+                        </div>
+                        <div class="col-md-6">
+                          <div class="card-body py-0">
+                            <p class="text-muted mb-0">{{brand.name}}</p>
+                          </div>
                         </div>
                       </div>
                     </div>
                   </div>
-                </div>
                 {% endfor %}
                 
               </div>
@@ -419,7 +418,7 @@ Home
                       <i class="bi bi-tag-fill"></i>
                       {% for tag in blog.tags.all %}
                         {% if forloop.counter == 1 %}
-                          <a href="{% url 'all-blogs' %}?tag={{tag.title}}" class='text-decoration-none'>{{tag.title}}</a>
+                          <a href="{% url 'all-blogs' %}?tag={{tag.title.lower}}" class='text-decoration-none'>{{tag.title}}</a>
                         {% endif %}
                       {% endfor %}
                     </div>
@@ -427,7 +426,7 @@ Home
 
                   <div class="post-header">
                     <h3 class="post-title">
-                      <a href="#" class="text-decoration-none">{{blog.title}}</a>
+                      <a href="{% url 'blog-detail' blog.slug %}" class="text-decoration-none">{{blog.title}}</a>
                     </h3>
                     <p>{{blog.description|safe|slice:'50'}}...</p>
                   </div>
@@ -467,29 +466,6 @@ Home
       </div>
     </section>
 
-    <section class="py-5">
-      <div class="container-fluid">
-        <h2 class="my-5">People are also looking for</h2>
-        <a href="#" class="btn btn-warning me-2 mb-2">Blue diamon almonds</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Angie’s Boomchickapop Corn</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Salty kettle Corn</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Chobani Greek Yogurt</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Sweet Vanilla Yogurt</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Foster Farms Takeout Crispy wings</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Warrior Blend Organic</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Chao Cheese Creamy</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Chicken meatballs</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Blue diamon almonds</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Angie’s Boomchickapop Corn</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Salty kettle Corn</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Chobani Greek Yogurt</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Sweet Vanilla Yogurt</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Foster Farms Takeout Crispy wings</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Warrior Blend Organic</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Chao Cheese Creamy</a>
-        <a href="#" class="btn btn-warning me-2 mb-2">Chicken meatballs</a>
-      </div>
-    </section>
 
     <section class="py-5">
       <div class="container-fluid">
