@@ -45,6 +45,9 @@ class ProductRepo:
 
         category = query.get("category" , None)
 
+        brand = query.get("brand" , None)
+        
+
         order_by = query.get("order_by" , "-created_at")
 
         if title:
@@ -60,7 +63,10 @@ class ProductRepo:
             products = products.filter(price__lte = max_price)
 
         if category:
-            products = products.filter(category__id = category)
+            products = products.filter(category__title__iexact = category)
+
+        if brand:
+            products = products.filter(brand__name__iexact = brand)
 
         products = products.annotate(avg_rating = Avg("reviews__rating"))
 
