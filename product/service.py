@@ -21,7 +21,7 @@ class ProductService:
 
     def all_products(self , page:int , per_page:int , query:dict):
 
-        supported_query_param = {"order_by" , "min_price" , "max_price" , "title" , "category"}
+        supported_query_param = {"order_by" , "min_price" , "max_price" , "title" , "category" , "brand"}
 
         supported_ordering_param = {"price_low_to_high" , "price_high_to_low" , "old_to_new" , "new_to_old" , "rating_high_to_low" , "rating_low_to_high"}
 
