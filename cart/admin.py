@@ -1,6 +1,7 @@
 from django.contrib import admin
 from .models import Cart , CartItem , OrderItem , Order
 from django.contrib import messages
+from django.utils.timezone import now
 
 
 @admin.register(Cart)
@@ -28,7 +29,7 @@ class OrderAdmin(admin.ModelAdmin):
     @admin.action(description = "Mark selected order as shipped")
     def mark_selected_order_as_shipped(self , request , queryset):
         try:
-            shipped_order_count = queryset.update(status = "shipped")
+            shipped_order_count = queryset.update(status = "shipped" , shipped_at = now())
             self.message_user(request , f"Successfully marked {shipped_order_count} order(s) as shipped" , messages.SUCCESS)
 
         except Exception as e:
