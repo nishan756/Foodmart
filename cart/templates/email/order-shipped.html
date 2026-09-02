@@ -1,0 +1,54 @@
+{% extends 'email/base.html' %}
+
+{% block content %}
+<div class="success-icon">
+        Order Shipped
+    </div>
+
+    <p>
+        Hi <strong>{{ user.get_full_name|default:user.username }}</strong>,
+    </p>
+
+    <p>
+        Your order has been successfully shipped.
+        Thank you for shopping with Foodmart.
+    </p>
+
+    <div class="order-box">
+
+        <div class="order-row">
+            <span class="label">Order ID</span>
+            <span class="value">{{ instance.get_order_id }}</span>
+        </div>
+
+        <div class="order-row">
+            <span class="label">Order Date</span>
+            <span class="value">{{ instance.created_at }}</span>
+        </div>
+
+        <div class="order-row">
+            <span class="label">Total Amount</span>
+            <span class="value">৳{{ instance.total_price|add:instance.shipping_charge }} (With shipping charge)</span>
+        </div>
+
+        <div class="order-row">
+            <span class="label">Status</span>
+            <span class="value">Shipped</span>
+        </div>
+
+    </div>
+
+    <p>
+        We hope you enjoyed your shopping experience with Foodmart.
+        We look forward to serving you again.
+    </p>
+
+    <p>
+        If you have any questions regarding your order, please contact
+        our customer support team.
+    </p>
+
+    <p>
+        Thank you for choosing <strong>Foodmart</strong> ❤️
+    </p>
+{% endblock content %}
