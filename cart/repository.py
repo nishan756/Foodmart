@@ -114,7 +114,7 @@ class OrderRepo:
 
     @transaction.atomic()
     def confirm_order(self , items , user , shipping_address , city , postal_code , phone_number , full_name , email):
-        order = Order.objects.create(user = user , full_name = full_name , email = email , phone_number = phone_number , shipping_address = shipping_address , city = city , postal_code = postal_code)
+        order = Order(user = user , full_name = full_name , email = email , phone_number = phone_number , shipping_address = shipping_address , city = city , postal_code = postal_code)
 
         canceled_item = []
 
