@@ -27,12 +27,12 @@ def send_email(sender , instance , created , **kwargs):
 
     if created:
         kwargs["subject"] = "Thanks for your order."
-        kwargs["template_name"] = "order-completed.html"
+        kwargs["template_name"] = "email/order-completed.html"
 
     else:
         if instance.status == "shipped":
             kwargs["subject"] = "Your order has reached."
-            kwargs["template_name"] = "order-shipped.html"
+            kwargs["template_name"] = "email/order-shipped.html"
 
     thread = Thread(target = EmailService.send_email , kwargs = kwargs)
 
