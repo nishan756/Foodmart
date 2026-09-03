@@ -1,0 +1,157 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block title %}
+Request Detail
+{% endblock %}
+
+{% block css %}
+    <link rel='stylesheet' href="{% static 'css/product-request-detail.css' %}">
+    <link rel='stylesheet' href="{% static 'css/status.css' %}">
+{% endblock %} 
+
+
+{% block content %}
+
+<div class="request-detail-page">
+
+    <a href="{% url 'all-requests' %}" class="back-link btn btn-outline-info">
+        ← Back to Requests
+    </a>
+
+    <div class="detail-header">
+        <h2>Request Details</h2>
+        <p>View information about your product request.</p>
+    </div>
+
+
+    <div class="detail-card">
+
+        <!-- Product -->
+
+        <div class="product-section">
+
+            {% if product_request.product.image %}
+                <img
+                    src="{{ product_request.product.image.url }}"
+                    alt="{{ product_request.product.name }}"
+                    class="product-image"
+                >
+            {% else %}
+                <div class="product-image"></div>
+            {% endif %}
+
+            <div class="product-info">
+
+                <h3>{{ product_request.product.title }}</h3>
+
+                {% if product_request.product.brand %}
+                    <p>
+                        Brand: {{ product_request.product.brand.name }}
+                    </p>
+                {% endif %}
+
+                <p>
+                    Requested Quantity:
+                    <strong>{{ product_request.qty }}</strong>
+                </p>
+
+                <a
+                    href="{% url 'product-detail' product_request.product.id %}"
+                    class="view-product"
+                >
+                    View Product
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Request information -->
+
+        <div class="request-info">
+
+            <h3 class="section-title">
+                Request Information
+            </h3>
+
+            <div class="info-grid">
+
+                <div class="info-item">
+                    <span class="info-label">
+                        Request ID
+                    </span>
+
+                    <span class="info-value">
+                        #{{ product_request.id }}
+                    </span>
+                </div>
+
+
+                <div class="info-item">
+                    <span class="info-label">
+                        Quantity
+                    </span>
+
+                    <span class="info-value">
+                        {{ product_request.qty }}
+                    </span>
+                </div>
+
+
+                <div class="info-item">
+                    <span class="info-label">
+                        Status
+                    </span>
+
+                    <span class="info-value">
+
+                        <span class="status status-{{product_request.status}}">
+                            {{product_request.get_status_display}}
+                        </span>
+
+                    </span>
+                </div>
+
+
+                <div class="info-item">
+                    <span class="info-label">
+                        Requested At
+                    </span>
+
+                    <span class="info-value">
+                        {{ product_request.created_at|date:"M d, Y, h:i A" }}
+                    </span>
+                </div>
+
+
+                <div class="info-item">
+                    <span class="info-label">
+                        Admin Note
+                    </span>
+
+                    <span class="info-value">
+                        {{ product_request.admin_note | default:"None" }}
+                    </span>
+                </div>
+
+            </div>
+
+            {% if product_request.status == 'pending'%}
+                <form method='POST' action="{% url 'cancel-request' product_request.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to cancel this request?')" style="margin-top:20px;">
+                        Cancel Request
+                    </button>
+                </form>
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}
