@@ -11,14 +11,23 @@ from django.contrib import messages
 @login_required(login_url = "login")
 @require_GET
 def all_requests(request):
-    requests = ProductRequestService().get_requests(request.user)
+    # Fetching page number
+    page = request.GET.get("page" , 1)
+
+    # Handling exception
+    try:page = int(page)
+    except(ValueError , TypeError):page = 1
+
+    # Fetching product requests
+    requests = ProductRequestService().get_requests(request.user , page)
+
     return render(request , "all-requests.html" , {"requests":requests})
 
 
 @login_required(login_url = "login")
 @require_POST
 def create_request(request , product_id):
-    qty = request.POST.get("qty")
+    qty = request.POST.get("qty" , 1)
     try:qty = int(qty)
     except(ValueError , TypeError):qty = 1
 

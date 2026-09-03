@@ -1,6 +1,7 @@
 from .repository import ProductRequestRepo
 from product.service import ProductService
 from core.exceptions import ObjectAlreadyExists
+from django.core.paginator import Paginator
 
 class ProductRequestService:
 
@@ -22,8 +23,14 @@ class ProductRequestService:
         product = ProductService().get_product(product_id)
         return self.repo.create_request(user , product , qty)
     
-    def get_requests(self , user):
-        return self.repo.get_requests(user)
+    def get_requests(self , user , page:int):
+        product_requests = self.repo.get_requests(user)
+        
+        paginator = Paginator(product_requests , 20)
+        
+        product_requests = paginator.get_page(page)
+
+        return product_requests
     
     def cancel_request(self , user , id):
         return self.repo.cancel_request(user , id)
