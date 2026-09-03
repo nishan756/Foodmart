@@ -1,0 +1,137 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block css %}
+    <link rel='stylesheet' href="{% static 'css/all-requests.css' %}">
+    <link rel='stylesheet' href="{% static 'css/status.css' %}">
+{% endblock css %}
+
+{% block title %}
+    Your Requests
+{% endblock title %}
+
+{% block content %}
+<div class="request-page">
+
+    <div class="request-header">
+        <div>
+            <h2>Product Requests</h2>
+            <p>Track the products you have requested.</p>
+        </div>
+
+        <span class="request-count">
+            {{ requests|length }} Requests
+        </span>
+    </div>
+
+
+    <div class="request-table-wrapper">
+
+        {% if requests %}
+
+        <table class="request-table">
+
+            <thead>
+                <tr>
+                    <th>Product</th>
+                    <th>Quantity</th>
+                    <th>Status</th>
+                    <th>Requested At</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for request in requests %}
+
+                <tr>
+
+                    <td>
+                        <div class="product-info">
+
+                            {% if request.product.image %}
+                                <img
+                                    src="{{ request.product.image.url }}"
+                                    alt="{{ request.product.title }}"
+                                    class="product-image"
+                                >
+                            {% else %}
+                                <div class="product-image"></div>
+                            {% endif %}
+
+                            <div>
+                                <span class="product-name">
+                                    {{ request.product.name }}
+                                </span>
+
+                                <span class="product-id">
+                                    Request #{{ request.id }}
+                                </span>
+                            </div>
+
+                        </div>
+                    </td>
+
+
+                    <td>
+                        <span class="quantity">
+                            {{ request.qty }}
+                        </span>
+                    </td>
+
+
+                    <td>
+
+                        <span class="status status-{{request.status}}">
+                            {{request.get_status_display}}
+                        </span>
+
+                    </td>
+
+
+                    <td>
+                        <span class="request-date">
+                            {{ request.created_at|date:"M d, Y" }}
+                        </span>
+                    </td>
+
+
+                    <td>
+                        <a
+                            href="{% url 'product-request-detail' request.id %}"
+                            class="action-btn"
+                        >
+                            View
+                        </a>
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+        {% else %}
+
+        <div class="empty-state">
+
+            <div class="empty-icon"><i class="bi bi-box-seam"></i></div>
+
+            <h3>No product requests</h3>
+
+            <p>
+                You haven't requested any products yet.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+{% endblock content %}
