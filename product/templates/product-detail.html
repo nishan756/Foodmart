@@ -133,7 +133,7 @@
           {% else %}
 
             <!-- Request form -->
-            <form method="POST" id="requestForm" action="#">
+            <form method="POST" id="requestForm" action="{% url 'create-request' product.id %}">
 
               {% csrf_token %}
               <div class="row g-3 align-items-center mb-4">
