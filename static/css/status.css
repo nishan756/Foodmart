@@ -1,0 +1,29 @@
+    .status {
+        display: inline-flex;
+        align-items: center;
+        padding: 6px 11px;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: 600;
+    }
+    
+    .status-pending {
+        background: #fff7ed;
+        color: #c2410c;
+    }
+
+    .status-approved {
+        background: #f0fdf4;
+        color: #15803d;
+    }
+
+    .status-rejected {
+        background: #fef2f2;
+        color: #dc2626;
+    }
+
+    .status-cancelled {
+        background: #eff6ff;
+        color: #2563eb;
+    }
+
