@@ -21,6 +21,9 @@ def add_item(request , id):
         messages.info(request , str(e))
         return redirect("all-products")
 
+    except OutOfStock as e:
+        messages.warning(request , "This product is out of stock")
+
     except Exception as e:
         messages.error(request , "Something went wrong")
 
