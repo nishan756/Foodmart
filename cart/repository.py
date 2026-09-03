@@ -118,6 +118,8 @@ class OrderRepo:
 
         canceled_item = []
 
+        ordered_items = []
+
         total_price = 0
 
         for item in items:
@@ -125,7 +127,7 @@ class OrderRepo:
 
                 order_item = OrderItem.objects.create(user = user , product = item.product , order = order , product_title = item.product.title , product_image = item.product.image.url , unit_price = item.product.price , discount = item.product.discount , qty = item.qty , total_price = item.applicable_price())
                 total_price += item.applicable_price()
-
+                ordered_items.append(order_item)
                 product = Product.objects.select_for_update().get(id = item.product.id)
 
                 product.stock -= item.qty
@@ -137,8 +139,8 @@ class OrderRepo:
 
             CartItemRepo().del_item(item)
 
-        order.total_price = total_price
-
-        order.save()
+        if len(ordered_items) > 0:
+            order.total_price = total_price
+            order.save()
 
         return canceled_item
