@@ -91,7 +91,7 @@
 
         <p class="mb-3">
           <strong>Stock Status:</strong>
-          {% if product.is_active %} 
+          {% if product.stock > 0 %} 
             <span class="badge in-stock">{{product.stock}} (In Stock)</span>
           {% else %}
             <span class='badge out-of-stock'>0 (Out Of Stock)</span>
@@ -100,40 +100,68 @@
 
         <hr class="my-4">
 
-        <!-- Add to Cart Form -->
-        <form method="POST" id="addToCartForm" action="{% if product.is_active %} {% url 'add-item' product.id %}{% endif %}">
+        {% if product.stock > 0 %}
+          <!-- Add to Cart Form -->
+          <form method="POST" id="addToCartForm" action="{% url 'add-item' product.id %}">
 
-          {% csrf_token %}
-          <div class="row g-3 align-items-center mb-4">
+            {% csrf_token %}
+            <div class="row g-3 align-items-center mb-4">
 
-            <!-- Quantity Input -->
-            <div class="col-auto">
-              <label for="qty" class="form-label fw-bold me-2">Quantity:</label>
-            </div>
-
-            <div class="col-auto">
-              <div class="input-group quantity-picker" style="width: 130px;">
-                <button class="btn btn-outline-secondary" type="button" id="btn-minus">-</button>
-                <input type="number" id="qty" name="qty" class="form-control text-center" value="1" min="1" max="{% if product.is_active %}{{product.stock}} {% else %}20{% endif %}" readOnly>
-                <button class="btn btn-outline-secondary" type="button" id="btn-plus">+</button>
+              <!-- Quantity Input -->
+              <div class="col-auto">
+                <label for="qty" class="form-label fw-bold me-2">Quantity:</label>
               </div>
+
+              <div class="col-auto">
+                <div class="input-group quantity-picker" style="width: 130px;">
+                  <button class="btn btn-outline-secondary" type="button" id="btn-minus">-</button>
+                  <input type="number" id="qty" name="qty" class="form-control text-center" value="1" min="1" max="{% if product.is_active %}{{product.stock}} {% else %}20{% endif %}" readOnly>
+                  <button class="btn btn-outline-secondary" type="button" id="btn-plus">+</button>
+                </div>
+              </div>
+
+            </div>  
+
+            <!-- Action Buttons -->
+            <div class="d-grid gap-2 d-md-flex">
+                <button type="submit" class="btn btn-primary btn-lg px-4 me-md-2">
+                  <i class="bi bi-cart-plus me-2"></i>Add to cart
+                </button>
             </div>
+          </form>
+        
+          {% else %}
 
-          </div>  
+            <!-- Request form -->
+            <form method="POST" id="requestForm" action="#">
 
-          <!-- Action Buttons -->
-          <div class="d-grid gap-2 d-md-flex">
-            {% if product.is_active %}
-              <button type="submit" class="btn btn-primary btn-lg px-4 me-md-2">
-                <i class="bi bi-cart-plus me-2"></i>Add to cart
-              </button>
-            {% else %}
-              <button type="submit" class="btn btn-primary btn-lg px-4 me-md-2">
-                <img src="{% static 'icons/please.png' %}" class='icon'> Request for this product
-              </button>
-            {% endif %}
-          </div>
-        </form>
+              {% csrf_token %}
+              <div class="row g-3 align-items-center mb-4">
+
+                <!-- Quantity Input -->
+                <div class="col-auto">
+                  <label for="qty" class="form-label fw-bold me-2">Quantity:</label>
+                </div>
+
+                <div class="col-auto">
+                  <div class="input-group quantity-picker" style="width: 130px;">
+                    <button class="btn btn-outline-secondary" type="button" id="btn-minus">-</button>
+                    <input type="number" id="qty" name="qty" class="form-control text-center" value="1" min="1" max="10" readOnly>
+                    <button class="btn btn-outline-secondary" type="button" id="btn-plus">+</button>
+                  </div>
+                </div>
+
+              </div>  
+
+              <!-- Action Buttons -->
+              <div class="d-grid gap-2 d-md-flex">
+                  <button type="submit" class="btn btn-secondary btn-lg px-4 me-md-2">
+                    <i class="bi bi-cart-plus me-2"></i>Request for this product
+                  </button>
+              </div>
+            </form>
+
+          {% endif %}
 
       </div>
     </div>
