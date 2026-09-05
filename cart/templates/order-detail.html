@@ -49,13 +49,29 @@
             <div class="col-md-6">
                 <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-location-dot me-2"></i>Shipping Info</h5>
                 <div class="p-3 bg-light rounded border">
-                    <p class="mb-2"><span class="info-label">Location:</span> <span class="info-value">{{order.location}}</span></p>
+                    <p class="mb-2"><span class="info-label">Location:</span> <span class="info-value">{{order.shipping_address}}</span></p>
                     <p class="mb-2"><span class="info-label">City:</span> <span class="info-value">{{order.city}}</span></p>
                     <p class="mb-2"><span class="info-label">Postal Code:</span> <span class="info-value">{{order.postal_code}}</span></p>
                     <p class="mb-2"><span class="info-label">Order Date:</span> <span class="info-value">{{order.created_at}}</span></p>
                     <p class="mb-0"><span class="info-label">Shipped At:</span> <span class="info-value">{{order.shipped_at | default:"Not Shipped"}}</span></p>
                 </div>
             </div>
+
+            <!-- Payment Info -->
+            <div class="col-md-6">
+                <h5 class="fw-bold mb-3 text-primary"><i class="fa-solid fa-location-dot me-2"></i>Payment Info</h5>
+                <div class="p-3 bg-light rounded border">
+                    <p class="mb-2"><span class="info-label">Payment Type:</span> <span class="info-value">{{order.get_payment_type_display}}</span></p>
+                    <p class="mb-2"><span class="info-label">Amount:</span> <span class="info-value">৳ {{payment.amount}}</span></p>
+                    <p class="mb-0"><span class="info-label">Transaction ID:</span> <span class="info-value">{{payment.transaction_id | default:"N/A"}}</span></p>
+                    <p class="mb-2"><span class="info-label">Status:</span> <span class="info-value">{{payment.get_status_display}}</span></p>
+
+                    {% if payment.status == "pending" and order.payment_type == 'online_payment' %}
+                        <a href="/payment/start/{{order.id}}/"><button class='btn btn-primary'>Pay Now</button></a>
+                    {% endif %}
+                </div>
+            </div>
+
         </div>
 
         <!-- Ordered Items Table -->
