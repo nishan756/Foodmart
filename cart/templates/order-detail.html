@@ -66,8 +66,10 @@
                     <p class="mb-0"><span class="info-label">Transaction ID:</span> <span class="info-value">{{payment.transaction_id | default:"N/A"}}</span></p>
                     <p class="mb-2"><span class="info-label">Status:</span> <span class="info-value">{{payment.get_status_display}}</span></p>
 
-                    {% if payment.status == "pending" and order.payment_type == 'online_payment' %}
-                        <a href="/payment/start/{{order.id}}/"><button class='btn btn-primary'>Pay Now</button></a>
+                    {% if order.payment_type == 'online_payment' %}
+                        {% if payment.status == 'pending' or payment.status == 'cancelled' or payment.status == 'failed' %}
+                            <a href="/payment/start/{{order.id}}/"><button class='btn btn-primary'>Pay Now</button></a>
+                        {% endif %}
                     {% endif %}
                 </div>
             </div>
