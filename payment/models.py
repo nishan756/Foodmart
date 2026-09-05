@@ -1,7 +1,10 @@
 from django.db import models
 from cart.models import Order
+import uuid
 
 class Payment(models.Model):
+
+    id = models.UUIDField(primary_key = True , default = uuid.uuid4 , editable = False)
 
     order = models.ForeignKey(Order , on_delete = models.CASCADE , related_name = "payment")
 
