@@ -4,8 +4,10 @@ from product.service import ProductService
 from django.core.exceptions import ObjectDoesNotExist
 from uuid import UUID
 from django.db import transaction
+from django.db.models import Prefetch
 from product.exceptions import OutOfStock
 from django.db.models import Count , Sum
+from payment.models import Payment
 
 
 class CartRepo:
@@ -103,7 +105,7 @@ class OrderRepo:
 
         orders = orders.annotate(total_item = Count("order_items"))
 
-        return orders
+        return orders.order_by("-created_at")
 
     def get_order(self , id):
         try:
