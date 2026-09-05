@@ -45,8 +45,10 @@ INSTALLED_APPS = [
     'cart',
     'wishlist',
     'blog',
+    'payment',
     'product_request',
     'django_summernote',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -135,6 +137,10 @@ EMAIL_PORT = os.environ.get('EMAIL_POST')
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY")
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY")
+STRIPE_WEBHOOK_SECRET = os.getenv("STRIPE_WEBHOOK_SECRET")
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.1/howto/static-files/
