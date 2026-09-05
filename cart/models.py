@@ -88,6 +88,13 @@ class Order(models.Model):
 
     shipping_charge = models.PositiveIntegerField(default = 50)
 
+    
+    class PaymentTypeChoices(models.TextChoices):
+        COD = "cod" , "Cash On Delivery"
+        ONLINE_PAYMENT = "online_payment" , "Online Payment"
+
+    payment_type = models.CharField(max_length = 15 , default = PaymentTypeChoices.COD , choices = PaymentTypeChoices.choices)
+
     class OrderStatus(models.TextChoices):
         PENDING = "pending" , "Pending"
 
