@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+
+Payment Successfull
+
+{% endblock title %}
+
+{% block css %}
+    <link rel='stylesheet' href="{% static 'css/payment-success.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="payment-result-wrapper">
+
+<div class="payment-result-card">
+
+    <div class="payment-icon">
+        ✓
+    </div>
+
+    <h1>Payment Successful!</h1>
+
+    <p>
+        Your payment has been successfully completed.
+        Thank you for shopping with Foodmart.
+    </p>
+
+    <div class="payment-info">
+        Transaction ID:
+        <strong>{{ payment.transaction_id }}</strong>
+    </div>
+
+    <a href="{% url 'all-products' %}" class="payment-btn">
+        Continue Shopping
+    </a>
+
+</div>
+
+</div>
+{% endblock content %}
+

@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+Payment Cancel
+{% endblock title %}
+
+{% block css %}
+    <link rel='stylesheet' href="{% static 'css/payment-cancel.css' %}">
+{% endblock css %}
+
+{% block content %}
+<div class="payment-result-wrapper">
+
+<div class="payment-result-card">
+
+    <div class="payment-icon">
+        <i class='bi-x'></i>
+    </div>
+
+    <h1>Payment Cancelled</h1>
+
+    <p>
+        Your payment was cancelled before completion.
+        No payment has been completed for this transaction.
+    </p>
+
+    <div class="payment-actions">
+
+        <a href="{% url 'all-products' %}" class="payment-btn primary-btn">
+            Continue Shopping
+        </a>
+
+        <a href="{% url 'my-orders' %}" class="payment-btn secondary-btn">
+            My Orders
+        </a>
+
+    </div>
+
+</div>
+
+</div>
+{% endblock content %}
