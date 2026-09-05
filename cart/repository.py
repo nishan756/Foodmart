@@ -115,8 +115,8 @@ class OrderRepo:
         
 
     @transaction.atomic()
-    def confirm_order(self , items , user , shipping_address , city , postal_code , phone_number , full_name , email):
-        order = Order(user = user , full_name = full_name , email = email , phone_number = phone_number , shipping_address = shipping_address , city = city , postal_code = postal_code)
+    def confirm_order(self , items , user , shipping_address , city , postal_code , phone_number , full_name , email , payment_type):
+        order = Order(user = user , full_name = full_name , email = email , phone_number = phone_number , shipping_address = shipping_address , city = city , postal_code = postal_code , payment_type = payment_type)
 
         canceled_item = []
 
@@ -145,4 +145,4 @@ class OrderRepo:
             order.total_price = total_price
             order.save()
 
-        return canceled_item
+        return {"cancelled_items":canceled_item , "order":order}

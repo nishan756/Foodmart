@@ -6,6 +6,8 @@ from django.contrib import messages
 from product.exceptions import OutOfStock
 from .forms import OrderForm , OrderFilterForm
 from .service import CartItemService , OrderService
+from payment.service import PaymentService
+from django.urls import reverse
 
 
 @login_required(login_url = "login")
@@ -103,12 +105,21 @@ def confirm_order(request):
 
             postal_code = form.cleaned_data.get("postal_code")
 
+            payment_type = form.cleaned_data.get("payment_type")
+
             items = CartItemService().get_user_cart_items(request.cart)
 
-            canceled_items = OrderService().confirm_order(items , request.user , shipping_address , city , postal_code , phone_number , full_name , email)
+            order_dict = OrderService().confirm_order(items , request.user , shipping_address , city , postal_code , phone_number , full_name , email , payment_type)
 
-            if canceled_items:
-                messages.info(request , f"{[item.product.title for item in canceled_items]} these product has stocked out. We're sorry")
+            cancelled_items = order_dict.pop("cancelled_items")
+
+            order = order_dict.pop('order')
+
+            if len(cancelled_items) == 0 and payment_type == "online_payment":
+                return redirect("payment:start-payment" , order.id)
+
+            if cancelled_items:
+                messages.info(request , f"{[item.product.title for item in cancelled_items]} these product has stocked out. We're sorry")
         else:
             messages.error(request , form.errors)
 
@@ -137,7 +148,8 @@ def my_orders(request):
 def order_detail(request , id):
     try:
         order = OrderService().get_order(id)
-        return render(request , "order-detail.html" , {"order":order})
+        payment = PaymentService.get_payment(request.user , id)
+        return render(request , "order-detail.html" , {"order":order , "payment":payment})
     
     except ObjectDoesNotExist as e:
         messages.info(request , str(e))

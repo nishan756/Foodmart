@@ -73,5 +73,5 @@ class OrderService:
         return self.repo.get_order(id)
 
     
-    def confirm_order(self , items , user , shipping_address , city , postal_code , phone_number , full_name , email ):
-        return self.repo.confirm_order(items , user , shipping_address , city , postal_code , phone_number , full_name  , email)
+    def confirm_order(self , items , user , shipping_address , city , postal_code , phone_number , full_name , email , payment_type ):
+        return self.repo.confirm_order(items , user , shipping_address , city , postal_code , phone_number , full_name  , email , payment_type)
