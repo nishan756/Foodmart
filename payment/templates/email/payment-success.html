@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Payment Successful</title>
+
+<style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-color: #f4f6f8;
+        font-family: Arial, Helvetica, sans-serif;
+        color: #333333;
+    }
+
+    .email-wrapper {
+        width: 100%;
+        padding: 40px 15px;
+        box-sizing: border-box;
+    }
+
+    .email-container {
+        max-width: 600px;
+        margin: 0 auto;
+        background-color: #ffffff;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    }
+
+    .header {
+        background-color: #16a34a;
+        padding: 30px 20px;
+        text-align: center;
+        color: #ffffff;
+    }
+
+    .header .icon {
+        width: 60px;
+        height: 60px;
+        margin: 0 auto 15px;
+        background-color: #ffffff;
+        color: #16a34a;
+        border-radius: 50%;
+        font-size: 32px;
+        line-height: 60px;
+        font-weight: bold;
+    }
+
+    .header h1 {
+        margin: 0;
+        font-size: 26px;
+    }
+
+    .header p {
+        margin: 8px 0 0;
+        font-size: 14px;
+        opacity: 0.9;
+    }
+
+    .content {
+        padding: 35px 30px;
+    }
+
+    .greeting {
+        font-size: 18px;
+        margin-bottom: 10px;
+    }
+
+    .message {
+        color: #666666;
+        font-size: 15px;
+        line-height: 1.7;
+    }
+
+    .payment-box {
+        margin-top: 25px;
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .payment-title {
+        background-color: #f9fafb;
+        padding: 15px 18px;
+        font-size: 16px;
+        font-weight: bold;
+        color: #111827;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    .payment-row {
+        display: table;
+        width: 100%;
+        padding: 12px 18px;
+        box-sizing: border-box;
+    }
+
+    .payment-label {
+        display: table-cell;
+        width: 50%;
+        color: #6b7280;
+        font-size: 14px;
+    }
+
+    .payment-value {
+        display: table-cell;
+        width: 50%;
+        text-align: right;
+        color: #111827;
+        font-size: 14px;
+        font-weight: 600;
+        word-break: break-word;
+    }
+
+    .amount {
+        color: #16a34a;
+        font-size: 20px;
+    }
+
+    .status {
+        display: inline-block;
+        padding: 5px 12px;
+        background-color: #dcfce7;
+        color: #15803d;
+        border-radius: 20px;
+        font-size: 12px;
+        font-weight: bold;
+    }
+
+    .order-button-wrapper {
+        text-align: center;
+        margin: 30px 0 10px;
+    }
+
+    .order-button {
+        display: inline-block;
+        padding: 13px 25px;
+        background-color: #16a34a;
+        color: #ffffff !important;
+        text-decoration: none;
+        border-radius: 7px;
+        font-size: 14px;
+        font-weight: bold;
+    }
+
+    .footer {
+        padding: 25px 30px;
+        background-color: #f9fafb;
+        text-align: center;
+        color: #888888;
+        font-size: 12px;
+        line-height: 1.6;
+    }
+
+    .footer strong {
+        color: #333333;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .email-wrapper {
+            padding: 20px 10px;
+        }
+
+        .content {
+            padding: 25px 20px;
+        }
+
+        .header h1 {
+            font-size: 22px;
+        }
+
+        .payment-row {
+            display: block;
+        }
+
+        .payment-label,
+        .payment-value {
+            display: block;
+            width: 100%;
+            text-align: left;
+        }
+
+        .payment-value {
+            margin-top: 4px;
+        }
+    }
+</style>
+
+</head>
+
+<body>
+
+<div class="email-wrapper">
+
+<div class="email-container">
+
+    <!-- Header -->
+    <div class="header">
+
+        <div class="icon">
+            ✓
+        </div>
+
+        <h1>Payment Successful!</h1>
+
+        <p>Your payment has been received successfully.</p>
+
+    </div>
+
+
+    <!-- Content -->
+    <div class="content">
+
+        <div class="greeting">
+            Hi <strong>{{ instance.order.user.get_full_name }}</strong>,
+        </div>
+
+        <p class="message">
+            Thank you for your payment. Your order
+            <strong>#{{ instance.order.get_order_id }}</strong> has been successfully paid
+            and is now being processed.
+        </p>
+
+
+        <!-- Payment Details -->
+        <div class="payment-box">
+
+            <div class="payment-title">
+                Payment Details
+            </div>
+
+            <div class="payment-row">
+                <div class="payment-label">
+                    Order ID
+                </div>
+
+                <div class="payment-value">
+                    #{{ instance.order.get_order_id }}
+                </div>
+            </div>
+
+
+            <div class="payment-row">
+                <div class="payment-label">
+                    Amount Paid
+                </div>
+
+                <div class="payment-value amount">
+                    ৳{{ instance.amount }}
+                </div>
+            </div>
+
+
+            <div class="payment-row">
+                <div class="payment-label">
+                    Payment Method
+                </div>
+
+                <div class="payment-value">
+                    {{ instance.order.payment_type }}
+                </div>
+            </div>
+
+
+            <div class="payment-row">
+                <div class="payment-label">
+                    Transaction ID
+                </div>
+
+                <div class="payment-value">
+                    {{ instance.transaction_id }}
+                </div>
+            </div>
+
+
+            <div class="payment-row">
+                <div class="payment-label">
+                    Payment Date
+                </div>
+
+                <div class="payment-value">
+                    {{ instance.created_at }}
+                </div>
+            </div>
+
+
+            <div class="payment-row">
+                <div class="payment-label">
+                    Status
+                </div>
+
+                <div class="payment-value">
+                    <span class="status">
+                        {{instance.get_status_display}}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+
+
+        <!-- Order Button -->
+        <div class="order-button-wrapper">
+
+            <a href="/localhost:8000/cart/order-detail/{{instance.order.id}}/" class="order-button">
+                View Your Order
+            </a>
+
+        </div>
+
+
+        <p class="message">
+            If you have any questions regarding your payment or order,
+            please contact our support team.
+        </p>
+
+        <p class="message">
+            Thank you for shopping with <strong>Foodmart</strong> ❤️
+        </p>
+
+    </div>
+
+
+    <!-- Footer -->
+    <div class="footer">
+
+        <strong>Foodmart</strong><br>
+
+        Your trusted online food store.
+
+        <br><br>
+
+        This is an automated email. Please do not reply directly to this email.
+
+        <br><br>
+
+        © {% now "Y" %} Foodmart. All rights reserved.
+
+    </div>
+
+</div>
+
+</div>
+
+</body>
+</html>
