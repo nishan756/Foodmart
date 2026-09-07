@@ -30,6 +30,8 @@ async function loadThanas(){
 async function loadShippingCharge(){
     const thanaId = document.getElementById("thana").value;
     const shippingCharge = document.getElementById("shippingCharge");
+    const subTotal = document.getElementById("subtotal").innerHTML;
+    const grandTotal = document.getElementById("grand-total");
     if(thanaId){
 
         try{
@@ -37,7 +39,8 @@ async function loadShippingCharge(){
             const data = await response.json();
 
             if(data.success){
-                shippingCharge.innerHTML = data.charge
+                shippingCharge.innerHTML = data.charge;
+                grandTotal.innerHTML = Number(data.charge)+Number(subTotal)
             }
             
         }
