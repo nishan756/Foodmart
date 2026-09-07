@@ -8,6 +8,7 @@ from .forms import OrderForm , OrderFilterForm
 from .service import CartItemService , OrderService
 from payment.service import PaymentService
 from django.urls import reverse
+from site_setting.service import ShippingChargeService
 
 
 @login_required(login_url = "login")
@@ -107,9 +108,13 @@ def confirm_order(request):
 
             payment_type = form.cleaned_data.get("payment_type")
 
+            thana = form.cleaned_data.get("thana")
+
+            shipping_charge = ShippingChargeService.get_shipping_charge(thana).charge or 0
+
             items = CartItemService().get_user_cart_items(request.cart)
 
-            order_dict = OrderService().confirm_order(items , request.user , shipping_address , city , postal_code , phone_number , full_name , email , payment_type)
+            order_dict = OrderService().confirm_order(items , request.user , shipping_address , city , postal_code , phone_number , full_name , email , payment_type , shipping_charge)
 
             cancelled_items = order_dict.pop("cancelled_items")
 
