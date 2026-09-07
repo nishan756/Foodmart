@@ -73,8 +73,8 @@ Checkout
               <span>৳<span id="subtotal">{{total_price}}</span></span>
             </div>
             <div class="d-flex justify-content-between mb-2">
-              <span class="text-muted">Delivery Charge</span>
-              <span>৳<span id="shipping">60</span></span>
+              <span class="text-muted">Shipping Charge</span>
+              <span>৳<span id="shippingCharge"></span></span>
             </div>
             <hr>
             <div class="d-flex justify-content-between h5 fw-bold">
@@ -135,4 +135,8 @@ Checkout
     </div>
   </div>
 </div>
+{% block js %}
+  <script src="{% static 'js/checkout.js' %}"></script>
+{% endblock js %}
+
 {% endblock content %}
