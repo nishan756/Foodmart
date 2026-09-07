@@ -17,7 +17,7 @@ def get_thana_list(request):
     return JsonResponse(data = {"thanas":thanas , "success":True})
 
 @csrf_exempt
-def getShippingCharge(request):
+def get_shipping_charge(request):
     thana_id = request.GET.get("thana_id")
 
     if not thana_id:
