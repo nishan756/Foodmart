@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'product_request',
     'django_summernote',
     'rest_framework',
+    'site_setting'
 ]
 
 MIDDLEWARE = [
