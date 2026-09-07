@@ -116,9 +116,9 @@ Explore Products
                             {% endif %}
 
                             <!--Form to add product in wishlist-->
-                            <form action="{% url 'add-to-wishlist' product.id %}" method="POST">
+                            <form id="wishlistForm">
                                 {% csrf_token %}
-                                <button type='submit' class='btn-wishlist'><i class='bi-heart'></i></button>
+                                <button type='button' class='btn-wishlist' id='wishlistBtn' onclick="addToWishlist('{{product.id}}')"><i class='bi-heart'></i></button>
                             </form>
                             
                             <figure>
@@ -181,5 +181,8 @@ Explore Products
 </div>
 </section>
 
+{% block js %}
+    <script src="{% static 'js/wishlist.js' %}"></script>
+{% endblock js %}
 {% endblock content %}
 
