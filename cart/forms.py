@@ -1,8 +1,36 @@
 from django import forms 
 
 from .models import Order
+from site_setting.service import DistrictService
 
 class OrderForm(forms.ModelForm):
+
+    district = forms.CharField(widget = forms.Select(
+        attrs = {
+            "type":'select',
+            "class":"form-select",
+            "id":'district',
+            "onchange":"loadThanas()",
+            "required":True
+        },
+        choices = [
+            (district.id , district.name) 
+            for district in DistrictService.get_districts().all()
+        ]
+    ))
+
+    thana = forms.CharField(
+        
+        widget = forms.Select(
+            attrs = {
+                "type":'select',
+                "class":'form-select',
+                "id":'thana',
+                "onchange":"loadShippingCharge()"
+            }
+        )
+    )
+    
     def __init__(self , *args , **kwargs):
         super().__init__(*args , **kwargs)
     
