@@ -34,6 +34,7 @@ urlpatterns = [
     path('blog/', include("blog.urls")),
     path('payment/', include("payment.urls") , name = "payment"),
     path('product-request/', include("product_request.urls")),
+    path('site-setting/', include("site_setting.urls")),
 ]
 
 if settings.DEBUG:
