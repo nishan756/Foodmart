@@ -197,7 +197,7 @@
               <!-- Scrollable Container -->
               <div class="review-list-container">
                 {% for review in product.reviews.all %}
-                  <div class="border-bottom pb-3 mb-3">
+                  <div class="border-bottom pb-3 mb-3" id="productReview-{{review.id}}">
                     
                     <div class="d-flex justify-content-between align-items-center mb-1">
                       <!-- Reviewer Name -->
@@ -208,9 +208,9 @@
 
                       {% if review.user == request.user %}
                         <!-- Delete action -->
-                        <form method="POST" action="{% url 'delete-review' review.id %}">
+                        <form id='deleteReviewForm'>
                           {% csrf_token %}
-                          <button type='submit' class='btn btn-danger'>Delete</button>
+                          <button type='button' class='btn btn-danger' onclick="deleteReview({{review.id}})">Delete</button>
                         </form>
                       {% endif %}
                     </div>
