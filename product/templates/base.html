@@ -8,13 +8,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="format-detection" content="telephone=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="author" content="">
-    <meta name="keywords" content="">
-    <meta name="description" content="">
+    <meta name="author" content="{{site_info.site_name}}">
+    <meta name="keywords" content="{{site_info.site_name}}">
+    <meta name="description" content="{{site_info.description}}">
 
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.0/font/bootstrap-icons.css">
+
+    <link rel="icon" type="image/x-icon" sizes="32x32" href="{{site_info.site_favicon.url}}">
 
     <link rel="stylesheet" type="text/css" href="{% static 'css/vendor.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
@@ -144,8 +146,12 @@
           
           <div class="col-sm-4 col-lg-3 text-center text-sm-start">
             <div class="main-logo">
-              <a href="{% url 'home' %}">
-                <img src="{% static 'images/logo.png' %}" alt="logo" class="img-fluid logo">
+              <a href="{% url 'home' %}" class='text-decoration-none'>
+                {% if site_info.site_logo %}
+                  <img src="{{site_info.site_logo.url}}" alt="logo" class="img-fluid logo">
+                {% else %}
+                  <h5>{{site_info.site_name}}</h5>
+                {% endif %}
               </a>
             </div>
           </div>
@@ -242,7 +248,13 @@
 
           <div class="col-lg-3 col-md-6 col-sm-6">
             <div class="footer-menu">
-              <img src="{% static 'images/logo.png' %}" alt="logo" class='logo'>
+              <!-- Start of logo-->
+              {% if site_info.site_logo %}
+                <img src="{{site_info.site_logo.url}}" alt="logo" class='logo'>
+              {% else %}
+              <h3>{{site_info.site_name}}</h3>
+              {% endif %}
+              <!-- End of logo-->
               <div class="social-links mt-5">
                 <ul class="d-flex list-unstyled gap-2">
                   <li>
@@ -345,7 +357,7 @@
       <div class="container-fluid">
         <div class="row">
           <div class="col-md-6 copyright">
-            <p>© 2023 Foodmart. All rights reserved.</p>
+            <p>© {% now "Y" %} {{site_info.site_name}}. All rights reserved.</p>
           </div>
           <div class="col-md-6 credit-link text-start text-md-end">
             <p>Free HTML Template by <a href="https://templatesjungle.com/">TemplatesJungle</a> Distributed by <a href="https://themewagon">ThemeWagon</a></p>
