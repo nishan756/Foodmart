@@ -13,9 +13,9 @@ class OrderForm(forms.ModelForm):
             "onchange":"loadThanas()",
             "required":True
         },
-        choices = [
-            (district.id , district.name) 
-            for district in DistrictService.get_districts().all()
+        choices = [("" , "Select District"),
+            *[(district.id , district.name) 
+            for district in DistrictService.get_districts().all()]
         ]
     ))
 
@@ -26,7 +26,8 @@ class OrderForm(forms.ModelForm):
                 "type":'select',
                 "class":'form-select',
                 "id":'thana',
-                "onchange":"loadShippingCharge()"
+                "onchange":"loadShippingCharge()",
+                "required":True
             }
         )
     )
