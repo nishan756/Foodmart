@@ -1,34 +1,43 @@
-
 (function($) {
 
   "use strict";
 
   var initPreloader = function() {
     $(document).ready(function($) {
-    var Body = $('body');
-        Body.addClass('preloader-site');
+      var Body = $('body');
+      Body.addClass('preloader-site');
     });
     $(window).load(function() {
-        $('.preloader-wrapper').fadeOut();
-        $('body').removeClass('preloader-site');
+      $('.preloader-wrapper').fadeOut();
+      $('body').removeClass('preloader-site');
     });
   }
 
   // init Chocolat light box
-	var initChocolat = function() {
-		Chocolat(document.querySelectorAll('.image-link'), {
-		  imageSize: 'contain',
-		  loop: true,
-		})
-	}
+  var initChocolat = function() {
+    Chocolat(document.querySelectorAll('.image-link'), {
+      imageSize: 'contain',
+      loop: true,
+    })
+  }
 
   var initSwiper = function() {
 
+    // Main Banner Swiper (Updated Navigation & Loop)
     var swiper = new Swiper(".main-swiper", {
       speed: 500,
+      loop: true,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+      },
       pagination: {
         el: ".swiper-pagination",
         clickable: true,
+      },
+      navigation: {
+        nextEl: ".swiper-button-next",
+        prevEl: ".swiper-button-prev",
       },
     });
 
