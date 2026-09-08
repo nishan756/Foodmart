@@ -1,8 +1,9 @@
 async function userLogin() {
 
-    const URL = "/session/user-login/";
+    const URL = window.location.href;
 
     const username = document.getElementById("username").value;
+    
     const password = document.getElementById("password").value;
 
     const csrftoken = document.querySelector(
@@ -28,9 +29,11 @@ async function userLogin() {
             },
             body: JSON.stringify({
                 username: username,
-                password: password
+                password: password,
+                recirect_url:window.location.search | "/home",
             }),
         });
+
 
         const data = await response.json();
 
