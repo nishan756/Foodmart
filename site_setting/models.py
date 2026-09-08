@@ -1,7 +1,6 @@
 from django.db import models 
 from django.core.exceptions import ValidationError
 
-
 class District(models.Model):
     name = models.CharField(max_length = 100 , unique = True)
 
@@ -33,3 +32,19 @@ class ShippingCharge(models.Model):
     def __str__(self):
         return f"{self.thana.name}: {self.charge}"
 
+
+class SiteInfo(models.Model):
+    site_name = models.CharField(max_length = 100)
+
+    site_logo = models.ImageField(upload_to = "site_logo/" , blank = True , null = True)
+
+    site_favicon = models.ImageField(upload_to = "site_favicon/" , blank = True , null = True)
+
+    phone_number = models.CharField(max_length = 14 , unique = True)
+
+    email = models.EmailField(unique = True)
+
+    description = models.TextField(blank = True , null = True)
+
+    def __str__(self):
+        return self.site_name
