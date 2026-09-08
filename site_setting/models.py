@@ -32,6 +32,29 @@ class ShippingCharge(models.Model):
     def __str__(self):
         return f"{self.thana.name}: {self.charge}"
 
+class Banner(models.Model):
+
+    class BannerTypeChoices(models.TextChoices):
+        HERO = "hero_banner" , "Hero Banner"
+        PROMO = "promo_card" , "Promo Card"
+
+    banner_type = models.CharField(max_length = 20 , choices = BannerTypeChoices.choices , default = BannerTypeChoices.HERO)
+
+    background_image = models.ImageField(upload_to="banners/", blank=True, null=True)
+
+    url = models.URLField(blank=True)
+
+    expires_at = models.DateTimeField(blank=True, null=True)
+
+    is_active = models.BooleanField(default=True)
+
+    created_at = models.DateTimeField(auto_now_add=True)
+    
+    class Meta:
+        ordering = ["-created_at"]
+
+    def __str__(self):
+        return f"Banner:{self.pk}"
 
 class SiteInfo(models.Model):
     site_name = models.CharField(max_length = 100)
