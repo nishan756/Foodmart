@@ -40,6 +40,8 @@ class SiteInfo(models.Model):
 
     site_favicon = models.ImageField(upload_to = "site_favicon/" , blank = True , null = True)
 
+    location = models.CharField(max_length = 200 , blank = True , null = True)
+
     phone_number = models.CharField(max_length = 14 , unique = True)
 
     email = models.EmailField(unique = True)
