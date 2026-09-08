@@ -15,6 +15,10 @@ from .service import UserService
 # =======Exceptions===========
 from core.exceptions import ObjectAlreadyExists
 
+from django.http import JsonResponse
+
+import json
+
 
 user_service = UserService()
 
@@ -55,20 +59,27 @@ def user_login(request):
     if request.user.is_authenticated:
         return redirect("home")
 
+    form = LoginForm()
+
     if request.method == "POST":
-        form = LoginForm(data = request.POST)
+        data = json.loads(request.body)
+
+        form = LoginForm(data={
+            "username": data.get("username"),
+            "password": data.get("password"),
+        })
+
         if form.is_valid():
-            username = form.cleaned_data.get("username")
-            password = form.cleaned_data.get("password")
+            username = data.get("username")
+            password = data.get("password")
             user = CustomBackend().authenticate(request , username = username , password = password)
             if user:
                 login(request , user)
-                messages.success(request , "Login successfull")
-                return redirect("home")
-            messages.info(request , "Invalid credentials")
-            return redirect("login")
+                return JsonResponse({"success":True , "redirect_url":request.GET.get("next" , "/"), "tags":"success"})
+            
+            return JsonResponse({"message":"Invalid Credentials" , "success":False , "tags":"info"})
+        return JsonResponse({"message":"Invalid form data" , "tags":"warning"})
 
-    form = LoginForm()
     return render(request , "login.html" , {"form":form})
 
 
