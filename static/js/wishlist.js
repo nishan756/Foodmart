@@ -20,7 +20,7 @@ async function addToWishlist(productID){
 
 
         message.innerHTML = `
-            <div class="alert alert-${data.tags} alert-dismissible fade show" role="alert">
+            <div class="alert alert-${data.tags} alert-dismissible fade show" role="alert" style="margin-top:15px;">
                 ${data.message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -55,7 +55,7 @@ async function removeFromWishlist(wishlistID){
 
 
         message.innerHTML = `
-            <div class="alert alert-${data.tags} alert-dismissible fade show" role="alert">
+            <div class="alert alert-${data.tags} alert-dismissible fade show" role="alert" style="margin-top:15px;">
                 ${data.message}
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
@@ -67,7 +67,7 @@ async function removeFromWishlist(wishlistID){
     }
     catch(error){
         message.innerHTML = `
-            <div class="alert alert-error alert-dismissible fade show" role="alert">
+            <div class="alert alert-error alert-dismissible fade show" role="alert" style="margin-top:15px;">
                 Something went wrong
                 <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
             </div>
