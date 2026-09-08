@@ -1,4 +1,6 @@
-from .models import ShippingCharge , Thana , District
+from .models import ShippingCharge , Thana , District , Banner
+from datetime import datetime
+from django.db.models import Q
 
 
 class DistrictRepo:
@@ -22,4 +24,22 @@ class ShippingChargeRepo:
         except ShippingCharge.DoesNotExist:
             return None
 
-    
+class BannerRepo:
+
+    @staticmethod
+    def get_active_banners():
+        banners = Banner.objects.filter(is_active = True)
+
+        current_time = datetime.today()
+
+        for banner in banners:
+
+            if banner.expires_at and banner.expires_at < current_time:
+
+                banner.is_active = False
+
+                banner.save(update_fields = ["is_active"])
+
+                banners.exclude(id = banner.id)
+                
+        return banners
