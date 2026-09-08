@@ -20,6 +20,8 @@ from blog.service import BlogService
 
 from django.http import JsonResponse
 
+from site_setting.service import BannerService
+
 def home(request):
     brands = ProductBrandService().all_brands()
 
@@ -29,7 +31,13 @@ def home(request):
 
     recent_blogs = BlogService().recent_blogs()
 
-    context = {"brands":brands , "top_selling_products":top_selling_products , "newly_arrived_products":newly_arrived_products , "recent_blogs":recent_blogs}
+    banners = BannerService.get_active_banners()
+
+    heroes = banners.pop("heroes")
+
+    promoes = banners.pop("promoes")
+
+    context = {"brands":brands , "top_selling_products":top_selling_products , "newly_arrived_products":newly_arrived_products , "recent_blogs":recent_blogs , "heroes":heroes , "promoes":promoes}
     return render(request , "home.html" , context)
 
 def all_products(request):
