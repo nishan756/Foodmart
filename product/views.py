@@ -18,6 +18,8 @@ from django.utils.http import url_has_allowed_host_and_scheme
 
 from blog.service import BlogService
 
+from django.http import JsonResponse
+
 def home(request):
     brands = ProductBrandService().all_brands()
 
@@ -85,16 +87,12 @@ def product_review(request , id):
 @require_POST
 def delete_review(request , id):
 
-    HTTP_REFERER = request.META.get("HTTP_REFERER")
-
     try:
         ProductReviewService().delete_review(review_id = id , user = request.user)
+        return JsonResponse({"message":"Successfully deleted your review" , "success":True , "tags":"success"})
 
     except ObjectDoesNotExist as e:
-        messages.info(request , str(e))
+        return JsonResponse({"message":str(e) , "success":False , "tags":"info"})
 
     except Exception as e:
-        print(e)
-        messages.error(request , "Something went wrong")
-
-    return redirect(HTTP_REFERER if url_has_allowed_host_and_scheme(HTTP_REFERER , request.get_host()) else "home")
+        return JsonResponse({"message":str(e) , "success":False , "tags":"warning"})
