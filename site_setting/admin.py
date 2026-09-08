@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import District, Thana, ShippingCharge
+from .models import District, Thana, ShippingCharge , SiteInfo
 
 
 @admin.register(District)
@@ -17,3 +17,7 @@ class ThanaAdmin(admin.ModelAdmin):
 @admin.register(ShippingCharge)
 class ShippingChargeAdmin(admin.ModelAdmin):
     list_display = ('thana', 'charge' , "is_active" , "created_at")
+
+@admin.register(SiteInfo)
+class SiteInfoAdmin(admin.ModelAdmin):
+    list_display = ('site_name', 'phone_number')
