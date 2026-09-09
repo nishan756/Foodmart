@@ -38,7 +38,7 @@ class SignupForm(UserCreationForm):
             field.widget.attrs.update(
                 {
                     "class":"form-control form-control-lg",
-                    "placeholder":field_name.capitalize()
+                    "placeholder":field_name.replace("_" , " ").title() if field_name not in {"password1" , "password2"} else ("Password" if field_name == "password1" else ("Confirm Password" if field_name == "password2" else None))
                 }
             )
             field.label_suffix = " "
