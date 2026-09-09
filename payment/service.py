@@ -14,7 +14,7 @@ class PaymentService:
     def create_payment(order:Order , transaction_id):
         if not PaymentService.check_order_payment_status(order.id):
             return PaymentRepo.create_payment(order , transaction_id)
-        raise ObjectAlreadyExists("Payment already compledted for this order")
+        return PaymentService.get_payment(order.user , order.id)
 
     @staticmethod
     def get_payment(user , order_id):
