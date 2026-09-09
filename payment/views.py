@@ -96,17 +96,23 @@ def stripe_webhook(request):
 
         payment_id = session["metadata"]["payment_id"]
 
-        payment = Payment.objects.filter(
-            id=payment_id
-        ).first()
+        try:
+            payment = PaymentService.get_payment_by_payment_id(payment_id)
 
-        if payment and payment.status != Payment.StatusChoices.SUCCESS:
+            if payment and payment.status != Payment.StatusChoices.SUCCESS:
 
-            payment.status = Payment.StatusChoices.SUCCESS
+                payment.status = Payment.StatusChoices.SUCCESS
 
-            payment.save(
-                update_fields=["status"]
-            )
+                payment.save(
+                    update_fields=["status"]
+                )
+                
+        except ObjectDoesNotExist as e:
+            messages.info(request , str(e))
+
+        except Exception as e:
+            messages.warning(request , "Something went wrong")
+        return redirect("my-orders")
 
     return HttpResponse(status=200)
 
