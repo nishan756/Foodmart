@@ -1,6 +1,6 @@
 from django import forms 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm , PasswordChangeForm
 
 User = get_user_model()
 
@@ -46,4 +46,18 @@ class SignupForm(UserCreationForm):
         model = User
         fields = ["first_name" , "last_name" , "username" , "email" , "date_of_birth"]
 
-    
+class CustomPasswordChangeForm(PasswordChangeForm):
+    def __init__(self , *args , **kwargs):
+        super().__init__(*args , **kwargs)
+
+        for field_name , field in self.fields.items():
+            field.widget.attrs.update(
+                {
+                    "class":"form-control form-control-lg",
+
+                    "placeholder":field_name.replace("_" , " ").title() if field_name not in{"new_password1" , "new_password2"} else("New Password" if field_name == "new_password1" else("Confirm Password")),
+
+                    "id":field_name,
+                }
+            )
+            field.label_suffix = " "
