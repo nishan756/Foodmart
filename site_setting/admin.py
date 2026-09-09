@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import District, Thana, ShippingCharge , SiteInfo , Banner
+from .models import District, Thana, ShippingCharge , SiteInfo , Banner , SocialLink
 
 
 @admin.register(District)
@@ -37,3 +37,7 @@ class BannerAdmin(admin.ModelAdmin):
     def mark_selected_banner_as_active(self , request , queryset):
         banner_count = queryset.update(is_active = True)
         self.message_user(request , "Successfully marked {} banner as active".format(banner_count))
+
+@admin.register(SocialLink)
+class SocialLinkAdmin(admin.ModelAdmin):
+    list_display = ["name" , "url"]
