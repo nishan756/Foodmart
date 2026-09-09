@@ -37,21 +37,6 @@ async function userLogin() {
 
         const data = await response.json();
 
-        message.innerHTML = `
-            <div class="alert alert-${data.tags} alert-dismissible fade show"
-                 role="alert"
-                 style="margin-top:15px;">
-
-                ${data.message}
-
-                <button type="button"
-                        class="btn-close"
-                        data-bs-dismiss="alert">
-                </button>
-
-            </div>
-        `;
-
         if (data.success === true) {
             window.location.href = data.redirect_url;
             return;
