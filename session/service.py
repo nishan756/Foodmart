@@ -1,6 +1,8 @@
 from .repository import UserRepo , User
 from django.db.models import Q
 from core.exceptions import ObjectAlreadyExists
+from django.core.exceptions import ValidationError
+from django.contrib.auth.password_validation import validate_password
 
 class UserService:
     repo = UserRepo()
@@ -20,3 +22,12 @@ class UserService:
 
     def user_delete(self , user):
         return self.repo.user_delete(user)
+
+    def change_password(self , user , old_password , new_password):
+        if not user.check_password(old_password):
+            raise ValidationError("Old password is incorrect")
+
+        validate_password(new_password , user)
+        user.set_password(new_password)
+        user.save()
+        return 
