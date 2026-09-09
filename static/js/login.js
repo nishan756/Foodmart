@@ -30,7 +30,7 @@ async function userLogin() {
             body: JSON.stringify({
                 username: username,
                 password: password,
-                recirect_url:window.location.search | "/home",
+                redirect_url:window.location.search,
             }),
         });
 
