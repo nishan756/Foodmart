@@ -25,6 +25,15 @@ async function changePassword(){
         `;
         return;
     }
+    else if(old_password == new_password1 || new_password2){
+        message.innerHTML = `
+        <div class="alert alert-warning alert-dismissible fade show" role="alert" style="margin-top:15px;">
+                Your new password same as old password
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        `;
+        return;
+    }
 
     try{
 
@@ -46,7 +55,7 @@ async function changePassword(){
         if(data.success == true){
             passwordChangeBtn.innerHTML = "Success";
             passwordChangeBtn.classList.replace("btn-secondary" , "btn-primary");
-            window.location.href = "product/all/";
+            window.location.href = "/session/user-login/";
         }
     }
     catch(error){
