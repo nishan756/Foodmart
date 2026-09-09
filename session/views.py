@@ -2,9 +2,11 @@ from django.shortcuts import render , redirect
 from django.contrib.auth import logout , login
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from werkzeug.routing import ValidationError
+from django.utils.http import url_has_allowed_host_and_scheme
 
 # ==========Forms============
-from .forms import LoginForm , SignupForm
+from .forms import LoginForm , SignupForm , CustomPasswordChangeForm
 
 # =========Backend============
 from .backends import CustomBackend
@@ -64,6 +66,11 @@ def user_login(request):
     if request.method == "POST":
         data = json.loads(request.body)
 
+        redirect_url = data.get("redirect_url" , "/home")
+
+        if not url_has_allowed_host_and_scheme(redirect_url , request.get_host()):
+            redirect_url = "/home"
+
         form = LoginForm(data={
             "username": data.get("username"),
             "password": data.get("password"),
@@ -75,7 +82,7 @@ def user_login(request):
             user = CustomBackend().authenticate(request , username = username , password = password)
             if user:
                 login(request , user)
-                return JsonResponse({"success":True , "redirect_url":request.GET.get("next" , "/"), "tags":"success"})
+                return JsonResponse({"success":True , "redirect_url":redirect_url, "tags":"success" , "message":"Login Successfull"})
             
             return JsonResponse({"message":"Invalid Credentials" , "success":False , "tags":"info"})
         return JsonResponse({"message":"Invalid form data" , "tags":"warning"})
@@ -99,4 +106,38 @@ def user_delete(request):
     else:
         messages.success(request , "We're sorry to see you go")
         return redirect('home')
+
+@login_required(login_url = "login")
+def change_password(request):
+    form = CustomPasswordChangeForm(request.user)
+    if request.method == "POST":
+
+        data = json.loads(request.body)
+
+        old_password = data.get("old_password")
+
+        new_password1 = data.get("new_password1")
+
+        new_password2 = data.get("new_password2")
+
+        if new_password1 != new_password2:
+            return JsonResponse({"success": False, "message": "New passwords do not match"})
+
+        form = CustomPasswordChangeForm(user=request.user, data=data)
+
+        if form.is_valid():
+            try:
+                user_service.change_password(
+                    user=request.user,
+                    old_password=form.cleaned_data["old_password"],
+                    new_password=form.cleaned_data["new_password1"]
+                )
+                messages.success(request, "Password changed successfully")
+                return JsonResponse({"success": True})
+            
+            except ValidationError as e:
+                messages.error(request, str(e))
+            
+        return JsonResponse({"success": False, "message": "Invalid form data"})
+    return render(request , "change-password.html" , {"form":form})
 
