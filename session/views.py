@@ -13,6 +13,7 @@ from .backends import CustomBackend
 
 # ========Service=============
 from .service import UserService
+from core.services.email import EmailService
 
 # =======Exceptions===========
 from core.exceptions import ObjectAlreadyExists
@@ -21,8 +22,8 @@ from django.http import JsonResponse
 
 import json
 
+import threading
 
-user_service = UserService()
 
 
 def user_signup(request):
@@ -38,7 +39,7 @@ def user_signup(request):
         if form.is_valid():
 
             try:
-                user_service.create_user(form.cleaned_data)
+                UserService().create_user(form.cleaned_data)
 
             except ObjectAlreadyExists as e:
                 messages.info(request, str(e))
@@ -82,7 +83,8 @@ def user_login(request):
             user = CustomBackend().authenticate(request , username = username , password = password)
             if user:
                 login(request , user)
-                return JsonResponse({"success":True , "redirect_url":redirect_url, "tags":"success" , "message":"Login Successfull"})
+                messages.success(request , "Login Successfull")
+                return JsonResponse({"success":True , "redirect_url":redirect_url, "tags":"success"})
             
             return JsonResponse({"message":"Invalid Credentials" , "success":False , "tags":"info"})
         return JsonResponse({"message":"Invalid form data" , "tags":"warning"})
@@ -98,7 +100,7 @@ def user_logout(request):
 @login_required(login_url = "login")
 def user_delete(request):
     try:
-        user_service.user_delete(request.user)
+        UserService().user_delete(request.user)
 
     except Exception as e:
         messages.error(request , "An exception occured while processing your request")
@@ -127,12 +129,26 @@ def change_password(request):
 
         if form.is_valid():
             try:
-                user_service.change_password(
+                UserService().change_password(
                     user=request.user,
-                    old_password=form.cleaned_data["old_password"],
-                    new_password=form.cleaned_data["new_password1"]
+                    old_password=old_password,
+                    new_password=new_password1,
                 )
                 messages.success(request, "Password changed successfully")
+
+                kwargs = {
+                    "subject" : "Your password has changed" , 
+                    "email_to" : [request.user.email] , 
+                    "template_name" : "email/change-password.html",
+                    "context":{
+                        "user":request.user,
+                        "body" : "We noticed your password has changed. If you doesn't make this action, please reset your password." , 
+                    }
+                }
+                email_thread = threading.Thread(target = EmailService.send_email , kwargs = kwargs)
+
+                email_thread.start()
+
                 return JsonResponse({"success": True})
             
             except ValidationError as e:
