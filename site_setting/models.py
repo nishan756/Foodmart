@@ -73,3 +73,11 @@ class SiteInfo(models.Model):
 
     def __str__(self):
         return self.site_name
+
+class SocialLink(models.Model):
+    name = models.CharField(max_length = 100)
+    url = models.URLField(unique = True)
+
+    def __str__(self):
+        return f"{self.name} : {self.url}"
+    
