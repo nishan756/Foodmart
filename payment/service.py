@@ -21,6 +21,10 @@ class PaymentService:
         return PaymentRepo.get_payment(user , order_id)
 
     @staticmethod
+    def get_payment_by_payment_id(id):
+        return PaymentRepo.get_payment_by_payment_id(id)
+
+    @staticmethod
     def get_payment_by_session_id(user , stripe_session_id):
         return PaymentRepo.get_payment_by_session_id(user , stripe_session_id = stripe_session_id)
         

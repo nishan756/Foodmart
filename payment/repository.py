@@ -21,6 +21,13 @@ class PaymentRepo:
             raise ObjectDoesNotExist("Payment not found")
 
     @staticmethod
+    def get_payment_by_payment_id(id):
+        try:
+            return Payment.objects.get(id = id)
+        except Payment.DoesNotExist:
+            raise ObjectDoesNotExist("Payment not found")
+
+    @staticmethod
     def create_payment(order:Order , transaction_id):
         return Payment.objects.create(
             order = order,
